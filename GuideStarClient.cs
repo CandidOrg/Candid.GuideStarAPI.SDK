@@ -32,11 +32,11 @@ namespace Candid.GuideStarAPI
       _subscriptionKey = subscriptionKey;
 
       //set required header
-      if (client.DefaultRequestHeaders.Contains("Subscription-key"))
+      if (client.DefaultRequestHeaders.Contains("Subscription-Key"))
       {
-        client.DefaultRequestHeaders.Remove("Subscription-key");
+        client.DefaultRequestHeaders.Remove("Subscription-Key");
       }
-      client.DefaultRequestHeaders.Add("Subscription-key", subscriptionKey);
+      client.DefaultRequestHeaders.Add("Subscription-Key", subscriptionKey);
     }
 
     // Using generics to do GET calls and return JSON deserialized as a model
