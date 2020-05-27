@@ -39,6 +39,11 @@ namespace Candid.GuideStarAPI
       client.DefaultRequestHeaders.Add("Subscription-key", subscriptionKey);
     }
 
+    public static IClient GetClient() 
+    {
+
+    }
+
     // Using generics to do GET calls and return JSON deserialized as a model
     public static async Task<T> Get<T>(string endpoint, ICollection<KeyValuePair<String, String>> query = null)
     {
