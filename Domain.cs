@@ -12,5 +12,6 @@ namespace Candid.GuideStarAPI
     }
 
     public static readonly Domain PremierV3 = new Domain("premier/v3");
+    public static readonly Domain CharityCheckV1 = new Domain("charitycheck/v1");
   }
 }

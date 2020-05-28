@@ -45,5 +45,14 @@ namespace Candid.GuideStarAPITest
 
       Assert.NotNull(premier);
     }
+
+    [Fact]
+    public void GuideStarCharityCheckResourceWorks()
+    {
+      GuideStarClient.Init(CHARITY_CHECK_KEY);
+      var charitycheck = CharityCheckResource.GetCharityCheck("13-1837418");
+
+      Assert.NotNull(charitycheck);
+    }
   }
 }
