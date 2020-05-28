@@ -19,30 +19,17 @@ namespace Candid.GuideStarAPI
     /// <summary>
     /// Endpoint Subscription Key
     /// </summary>
-    public string SubscriptionKey { get; }
+    public readonly SubscriptionKey SubscriptionKey;
 
     /// <summary>
-    /// Query params
+    /// Query param
     /// </summary>
-    public List<KeyValuePair<string, string>> QueryParams { get; private set; }
+    public string QueryParam { get; private set; }
 
     /// <summary>
     /// Post params
     /// </summary>
-    public List<KeyValuePair<string, string>> PostParams { get; private set; }
-
-    /// <summary>
-    /// Create a new Twilio request
-    /// </summary>
-    /// <param name="method">HTTP Method</param>
-    /// <param name="url">Request URL</param>
-    public Request(HttpMethod method, string url)
-    {
-      Method = method;
-      Uri = new Uri(url);
-      QueryParams = new List<KeyValuePair<string, string>>();
-      PostParams = new List<KeyValuePair<string, string>>();
-    }
+    public IDictionary<string, string> PostParams { get; private set; }
 
     /// <summary>
     /// Create a new Twilio request
@@ -54,40 +41,35 @@ namespace Candid.GuideStarAPI
     /// <param name="postParams">Post data</param>
     public Request(
         HttpMethod method,
-        string uri,
-        string region = null,
-        List<KeyValuePair<string, string>> queryParams = null,
-        List<KeyValuePair<string, string>> postParams = null
+        SubscriptionKey subscriptionKey,
+        Domain uri,
+        string queryParam = null,
+        IDictionary<string, string> postParams = null
     )
     {
       Method = method;
-      Uri = new Uri("https://apidata.guidestar.org" + uri);
+      SubscriptionKey = subscriptionKey;
+      QueryParam = queryParam ?? string.Empty;
+      PostParams = postParams ?? new Dictionary<string, string>();
 
-      QueryParams = queryParams ?? new List<KeyValuePair<string, string>>();
-      PostParams = postParams ?? new List<KeyValuePair<string, string>>();
+      Uri = ConstructUrl(new Uri("https://apidata.guidestar.org/" + uri), QueryParam);
     }
 
     /// <summary>
     /// Construct the request URL
     /// </summary>
     /// <returns>Built URL including query parameters</returns>
-    public Uri ConstructUrl()
+    public Uri ConstructUrl(Uri uri, string queryParam)
     {
-      return QueryParams.Count > 0 ?
-          new Uri(Uri.AbsoluteUri + "?" + EncodeParameters(QueryParams)) :
-          new Uri(Uri.AbsoluteUri);
+      return new Uri($"{uri.AbsoluteUri}/{queryParam}");
     }
 
-    /// <summary>
-    /// Set auth for the request
-    /// </summary>
-    /// <param name="subscriptionKey">SubscriptionKey</param>
-    public void SetAuth(string subscriptionKey)
+    public Uri GetUri()
     {
-      SubscriptionKey = subscriptionKey;
+      return Uri;
     }
 
-    private static string EncodeParameters(IEnumerable<KeyValuePair<string, string>> data)
+    private static string EncodeParameters(IDictionary<string, string> data)
     {
       var result = "";
       var first = true;
@@ -118,16 +100,6 @@ namespace Candid.GuideStarAPI
     }
 
     /// <summary>
-    /// Add query parameter to request
-    /// </summary>
-    /// <param name="name">name of parameter</param>
-    /// <param name="value">value of parameter</param>
-    public void AddQueryParam(string name, string value)
-    {
-      AddParam(QueryParams, name, value);
-    }
-
-    /// <summary>
     /// Add a parameter to the request payload
     /// </summary>
     /// <param name="name">name of parameter</param>
@@ -137,9 +109,9 @@ namespace Candid.GuideStarAPI
       AddParam(PostParams, name, value);
     }
 
-    private static void AddParam(ICollection<KeyValuePair<string, string>> list, string name, string value)
+    private static void AddParam(IDictionary<string, string> dict, string name, string value)
     {
-      list.Add(new KeyValuePair<string, string>(name, value));
+      dict.Add(name, value);
     }
 
     /// <summary>
@@ -166,7 +138,7 @@ namespace Candid.GuideStarAPI
       var other = (Request)obj;
       return Method.Equals(other.Method) &&
              Uri.Equals(other.Uri) &&
-             QueryParams.All(other.QueryParams.Contains) &&
+             QueryParam.Equals(other.QueryParam) &&
              PostParams.All(other.PostParams.Contains);
     }
 
@@ -180,7 +152,7 @@ namespace Candid.GuideStarAPI
       {
         return (Method?.GetHashCode() ?? 0) ^
                (Uri?.GetHashCode() ?? 0) ^
-               (QueryParams?.GetHashCode() ?? 0) ^
+               (QueryParam?.GetHashCode() ?? 0) ^
                (PostParams?.GetHashCode() ?? 0);
       }
     }
