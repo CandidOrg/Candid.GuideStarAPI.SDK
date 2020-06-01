@@ -1,57 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Candid.GuideStarAPI
+namespace Candid.GuideStarAPI.Resources
 {
-  public class PremierResource
+  public class PremierResource : AbstractResource
   {
-    public static string GetOrganization(string ein, RestClient client = null)
+    public static string GetOrganization(string ein)
     {
       var EIN = new EIN(ein);
 
-      client = client ?? GuideStarClient.GetRestClient();
-      var response = client.Request(BuildGetOrganizationRequest(EIN));
+      var response = Get(BuildGetRequest(EIN, Domain.PremierV3));
 
-      return response.Content;
+      return response;
     }
 
-    public static async Task<string> GetOrganizationAsync(string ein, RestClient client = null)
+    public static async Task<string> GetOrganizationAsync(string ein)
     {
       var EIN = new EIN(ein);
 
-      client = client ?? GuideStarClient.GetRestClient();
-      var response = await client.RequestAsync(BuildGetOrganizationRequest(EIN));
+      var response = await GetAsync(BuildGetRequest(EIN, Domain.PremierV3));
 
-      return response.Content;
-    }
-
-    private static Request BuildGetOrganizationRequest(EIN ein)
-    {
-
-
-      return new Request(
-                  HttpMethod.Get,
-                  GuideStarClient.GetSubscriptionKey(),
-                  Domain.PremierV3,
-                  ein.EinString
-              );
-    }
-  }
-
-  internal class EIN
-  {
-    public readonly string EinString;
-    private int EinLength = 10;
-    public EIN(string ein)
-    {
-      if (ein?.Length != EinLength)
-      {
-        throw new Exception($"Entered SubscriptionKey of incorrect length. Keys should be {EinLength} characters long");
-      }
-
-      EinString = ein;
+      return response;
     }
   }
 }

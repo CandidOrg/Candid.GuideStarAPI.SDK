@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Candid.GuideStarAPI
 {
-  public class RestClient
+  public class RestClient : IClient
   {
     /// <summary>
     /// Client to make HTTP requests
