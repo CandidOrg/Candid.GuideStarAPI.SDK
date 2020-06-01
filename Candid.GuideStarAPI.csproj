@@ -1,11 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Version>0.0.5-dev</Version>
+    <Company>Candid</Company>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <Compile Remove="XUnitTestProject1\**" />
+    <EmbeddedResource Remove="XUnitTestProject1\**" />
+    <None Remove="XUnitTestProject1\**" />
   </ItemGroup>
 
 </Project>
