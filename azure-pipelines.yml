@@ -28,7 +28,6 @@ steps:
     projects: 'Candid.GuideStarAPI.csproj'
     includesymbols: true
     versioningScheme: 'byPrereleaseNumber'
-steps:
 - task: NuGetCommand@2
   inputs:
     command: pack
