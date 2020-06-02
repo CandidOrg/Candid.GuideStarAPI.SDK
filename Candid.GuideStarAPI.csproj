@@ -4,8 +4,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>0.0.6-dev</Version>
+    <Version>0.0.7-dev</Version>
     <Company>Candid</Company>
+    <Description>SDK to simplify using GuideStar APIs</Description>
+    <Copyright>Candid</Copyright>
+    <PackageProjectUrl>https://github.com/CandidOrg/APILibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CandidOrg/APILibrary</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,4 +27,10 @@
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="readme.md">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+  </ItemGroup>
 </Project>

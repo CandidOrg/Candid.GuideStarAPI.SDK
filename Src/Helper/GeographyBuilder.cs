@@ -24,7 +24,7 @@ namespace Candid.GuideStarAPI
         _geography.zip = zipCode;
         return this;
       }
-      throw new Exception("Zip Codes are 5 characters long");
+      throw new ArgumentOutOfRangeException("Zip Codes are 5 characters long");
     }
 
     public IGeographyBuilder WithinZipRadius(int zipRadius)
@@ -34,7 +34,7 @@ namespace Candid.GuideStarAPI
         _geography.radius = zipRadius;
         return this;
       }
-      throw new Exception("Zip Radius must be greater than 0");
+      throw new ArgumentOutOfRangeException("Zip Radius must be greater than 0");
     }
 
     public IGeographyBuilder HavingMSA(IEnumerable<string> msa)
