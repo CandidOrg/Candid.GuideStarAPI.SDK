@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: 'Candid.GuideStarAPI.csproj'
+    feedsToUse: 'select'
+    verbosityRestore: 'Normal'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'Candid.GuideStarAPI.csproj'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '6f219f31-982d-413d-a320-c7741368a80d'
