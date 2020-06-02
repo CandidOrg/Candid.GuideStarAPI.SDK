@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>0.0.5-dev</Version>
+    <Version>0.0.6-dev</Version>
     <Company>Candid</Company>
   </PropertyGroup>
 
@@ -12,6 +12,14 @@
     <Compile Remove="XUnitTestProject1\**" />
     <EmbeddedResource Remove="XUnitTestProject1\**" />
     <None Remove="XUnitTestProject1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Src\Exceptions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
 
 </Project>

@@ -4,21 +4,21 @@ using System.Text;
 
 namespace Candid.GuideStarAPI
 {
-  public class SearchRequestBuilder : ISearchRequestBuilder
+  public class SearchPayloadBuilder : ISearchRequestBuilder
   {
-    protected SearchRequest _request;
+    protected SearchPayload _request;
 
-    private SearchRequestBuilder() => _request = new SearchRequest();
+    private SearchPayloadBuilder() => _request = new SearchPayload();
 
-    public static SearchRequestBuilder Create() => new SearchRequestBuilder();
+    public ISearchRequestBuilder Create() => new SearchPayloadBuilder();
 
-    public SearchRequestBuilder WithSearchTerms(string searchTerms)
+    public ISearchRequestBuilder WithSearchTerms(string searchTerms)
     {      
       _request.search_terms = searchTerms;
       return this;
     }
 
-    ISearchRequestBuilder From(int from)
+    public ISearchRequestBuilder From(int from)
     {
       if (from > 0)
       {
@@ -28,28 +28,28 @@ namespace Candid.GuideStarAPI
       throw new Exception("From must be greater than 0");
     }
 
-    ISearchRequestBuilder To(int to)
+    public ISearchRequestBuilder Size(int to)
     {
       if (to > 0)
       {
-        _request.to = to;
+        _request.size = to;
         return this;
       }
       throw new Exception("To must be greater than 0");
     }
 
-    ISearchRequestBuilder Sort()
+    public ISearchRequestBuilder Sort()
     {
       // whenever this gets implemented
       // _request.sort = new 
     }
 
-    ISearchRequestBuilder Filters()
+    public ISearchRequestBuilder Filters()
     {
       // whenever this gets implemented
       //var builder = new FilterBuilder();
     }
 
-    public SearchRequest Build() => _request;
+    public SearchPayload Build() => _request;
   }
 }

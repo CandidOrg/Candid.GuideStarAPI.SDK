@@ -3,7 +3,7 @@
   ISearchRequestBuilder Create();
   ISearchRequestBuilder WithSearchTerms(string searchTerms);
   ISearchRequestBuilder From(int from);
-  ISearchRequestBuilder To (int to);
+  ISearchRequestBuilder Size (int size);
   ISearchRequestBuilder Sort ();
   ISearchRequestBuilder Filters();
 }

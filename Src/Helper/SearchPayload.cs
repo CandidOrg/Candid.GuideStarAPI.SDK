@@ -1,6 +1,6 @@
 ﻿namespace Candid.GuideStarAPI
 {
-  public class SearchRequest
+  public class SearchPayload
   {
     public string search_terms { get; set; }
     public int from { get; set; }
@@ -8,7 +8,7 @@
     public Sort sort { get; set; }
     public Filters filters { get; set; }
 
-    public SearchRequest()
+    public SearchPayload()
     {
       sort = new Sort();
       filters = new Filters();
