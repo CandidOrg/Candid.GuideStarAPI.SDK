@@ -42,12 +42,14 @@ namespace Candid.GuideStarAPI
     {
       // whenever this gets implemented
       // _request.sort = new 
+      return this;
     }
 
     public ISearchRequestBuilder Filters()
     {
       // whenever this gets implemented
       //var builder = new FilterBuilder();
+      return this;
     }
 
     public SearchPayload Build() => _request;
