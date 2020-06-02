@@ -13,13 +13,14 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    projects: '.\Candid.GuideStarAPI.csproj'
+    projects: 'Candid.GuideStarAPI.csproj'
     feedsToUse: 'select'
+    verbosityRestore: 'Normal'
     includeNuGetOrg: true
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: './Candid.GuideStarAPI.csproj'
+    projects: 'Candid.GuideStarAPI.csproj'
     includesymbols: true
 - task: DotNetCoreCLI@2
   inputs:
