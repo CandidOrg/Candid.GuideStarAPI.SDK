@@ -1,17 +1,28 @@
-using System;
+﻿using System;
 using Candid.GuideStarAPI;
+using Candid.GuideStarApiTest;
+using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace Candid.GuideStarAPITest
 {
   public class GuideStarClientTest
   {
-    private static string CHARITY_CHECK_KEY = "f393e46952b54efc93b40166828b2804";
-    private static string CHARITY_CHECK_PDF_KEY = "4e1ba3f796fd45dda8443cf00d11c5ec";
-    private static string ESSENTIALS_KEY = "53e4525092684ecc95e6b62361ffcce7";
-    private static string PREMIER_KEY = "0866b5c31c444dd1b950c27db7859fa1";
+    private IConfiguration _config;
+    private static string CHARITY_CHECK_KEY;
+    private static string CHARITY_CHECK_PDF_KEY;
+    private static string ESSENTIALS_KEY;
+    private static string PREMIER_KEY;
     private static string GUIDESTAR_EIN = "";
 
+    public GuideStarClientTest()
+    {
+      _config = ConfigLoader.InitConfiguration();
+      CHARITY_CHECK_KEY = _config["Keys:CHARITY_CHECK_KEY"];
+      CHARITY_CHECK_PDF_KEY = _config["Keys:CHARITY_CHECK_PDF_KEY"];
+      ESSENTIALS_KEY = _config["Keys:ESSENTIALS_KEY"];
+      PREMIER_KEY = _config["Keys:PREMIER_KEY"];
+    }
     [Fact]
     public void GuideStarApiClientInitWorks()
     {

@@ -23,14 +23,11 @@ namespace Candid.GuideStarAPI.Resources
 
     private static Request BuildPostEssentialsRequest(SearchPayload payload)
     {
-      var dict = JsonSerializer
-        .Deserialize<Dictionary<string, string>>(JsonSerializer.Serialize(payload));
-
       return new Request(
         HttpMethod.Post,
         GuideStarClient.GetSubscriptionKey(),
         Domain.EssentialsV2,
-        postParams: dict
+        postParams: payload.ToDictionary()
       );
     }
   }

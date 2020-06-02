@@ -1,5 +1,7 @@
-﻿public interface IFilterBuilder
+﻿namespace Candid.GuideStarAPI
 {
-  IFilterBuilder WithSearchTerms(string searchTerms);
-  IFilterBuilder OnlyParentOrgs();
+  public interface IFilterBuilder
+  {
+    IGeographyBuilder Geography();
+  }
 }

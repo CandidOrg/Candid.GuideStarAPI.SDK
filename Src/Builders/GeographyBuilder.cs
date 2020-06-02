@@ -10,7 +10,7 @@ namespace Candid.GuideStarAPI
 
     private GeographyBuilder() => _geography = new Geography();
 
-    public static GeographyBuilder Create() => new GeographyBuilder();
+    internal static GeographyBuilder Create() => new GeographyBuilder();
 
     public IGeographyBuilder HavingState(IEnumerable<string> states)
     {
