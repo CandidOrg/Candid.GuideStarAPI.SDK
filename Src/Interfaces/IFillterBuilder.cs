@@ -1,4 +1,7 @@
-﻿public interface IFilterBuilder
+﻿namespace Candid.GuideStarAPI
 {
-  IGeographyBuilder Geology();
+  public interface IFilterBuilder
+  {
+    IGeographyBuilder Geography();
+  }
 }

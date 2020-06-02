@@ -1,4 +1,7 @@
-﻿namespace Candid.GuideStarAPI
+﻿using System.Collections.Generic;
+using System.Text.Json;
+
+namespace Candid.GuideStarAPI
 {
   public class SearchPayload
   {
@@ -7,6 +10,12 @@
     public int size { get; set; }
     public Sort sort { get; set; }
     public Filters filters { get; set; }
+
+    public Dictionary<string,string> ToDictionary()
+    {
+      return JsonSerializer
+        .Deserialize<Dictionary<string, string>>(JsonSerializer.Serialize(this)); ;
+    }
 
     public SearchPayload()
     {
