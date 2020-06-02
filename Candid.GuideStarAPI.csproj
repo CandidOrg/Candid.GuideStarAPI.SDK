@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>0.0.8</Version>
     <Company>Candid</Company>
     <Description>SDK to simplify using GuideStar APIs</Description>
     <Copyright>Candid</Copyright>

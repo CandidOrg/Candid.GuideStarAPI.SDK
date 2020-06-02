@@ -9,6 +9,11 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  Major: '0'
+  Minor: '0'
+  Patch: '9'
+
 steps:
 - task: DotNetCoreCLI@2
   inputs:
@@ -23,6 +28,14 @@ steps:
     projects: 'Candid.GuideStarAPI.csproj'
     includesymbols: true
     versioningScheme: 'byPrereleaseNumber'
+steps:
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    versioningScheme: byPrereleaseNumber
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'push'
