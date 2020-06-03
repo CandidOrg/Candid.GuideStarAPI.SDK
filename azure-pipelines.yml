@@ -16,6 +16,7 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'Restore'
   inputs:
     command: 'restore'
     projects: 'Candid.GuideStarAPI.csproj'
@@ -23,22 +24,30 @@ steps:
     feedsToUse: 'select'
     includeNuGetOrg: true
 - task: DotNetCoreCLI@2
+  displayName: 'Build'
   inputs:
     command: 'build'
     projects: 'Candid.GuideStarAPI.csproj'
-    includesymbols: true
     versioningScheme: 'byPrereleaseNumber'
 - task: NuGetCommand@2
+  displayName: 'Pack'
   inputs:
     command: pack
     projects: 'Candid.GuideStarAPI.csproj'
+    includesource: true
+    includesymbols: true
     versioningScheme: byPrereleaseNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
 - task: DotNetCoreCLI@2
+  displayName: 'Push'
   inputs:
     command: 'push'
+    versioningScheme: byPrereleaseNumber
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
     packagesToPush: '**/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '6f219f31-982d-413d-a320-c7741368a80d'
