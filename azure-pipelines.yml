@@ -45,7 +45,8 @@ steps:
     targetType: 'inline'
     script: |
       # Trying to get a hang on what is available
-      ls -a -1 --group-directories-first
+      ls bin -a -1 -R --group-directories-first
+      ls obj -a -1 -R --group-directories-first
 - task: DotNetCoreCLI@2
   displayName: 'Push'
   inputs:
