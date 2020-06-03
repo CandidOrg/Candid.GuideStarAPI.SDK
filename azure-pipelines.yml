@@ -40,13 +40,6 @@ steps:
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Trying to get a hang on what is available
-      ls bin -a -1 -R --group-directories-first
-      ls obj -a -1 -R --group-directories-first
 - task: DotNetCoreCLI@2
   displayName: 'Push'
   inputs:
@@ -55,6 +48,6 @@ steps:
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
-    packagesToPush: '**/*.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '6f219f31-982d-413d-a320-c7741368a80d'
