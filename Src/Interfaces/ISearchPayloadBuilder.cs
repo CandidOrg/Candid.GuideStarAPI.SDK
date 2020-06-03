@@ -1,4 +1,6 @@
-﻿namespace Candid.GuideStarAPI
+﻿using System;
+
+namespace Candid.GuideStarAPI
 {
   public interface ISearchPayloadBuilder
   {
@@ -6,7 +8,7 @@
     ISearchPayloadBuilder WithSearchTerms(string searchTerms);
     ISearchPayloadBuilder From(int from);
     ISearchPayloadBuilder Size(int size);
-    ISearchPayloadBuilder Sort();
-    IFilterBuilder Filters();
+    ISearchPayloadBuilder Sort(Action<ISortBuilder> action);
+    ISearchPayloadBuilder Filters(Action<IFilterBuilder> action);
   }
 }

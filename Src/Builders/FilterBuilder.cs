@@ -1,31 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Candid.GuideStarAPI
 {
-  class FilterBuilder : IFilterBuilder
+  internal class FilterBuilder : IFilterBuilder
   {
     protected Filters _filter;
-    protected GeographyBuilder _geoBuilder;
-    //protected IOrganizationBuilder _orgBuilder;
-    //protected IFinancialsBuilder _finBuilder;
 
     private FilterBuilder() => _filter = new Filters();
     internal static FilterBuilder Create() => new FilterBuilder();
 
-    public IGeographyBuilder Geography()
+    public IFilterBuilder Geography(Action<IGeographyBuilder> action)
     {
-      _geoBuilder = GeographyBuilder.Create();
-      return _geoBuilder;
+      var _geoBuilder = GeographyBuilder.Create();
+      action(_geoBuilder);
+      _filter.geography = _geoBuilder.Build();
+      return this;
     }
 
-    internal Filters Build()
+    public IFilterBuilder Organization(Action<IOrganizationBuilder> action)
     {
-      _filter.geography = _geoBuilder.Build();
-      //_filter.organization = _orgBuilder.Build();
-      //_filter.geography = _geoBuilder.Build();
-      return _filter;
+      var _orgBuilder = OrganizationBuilder.Create();
+      action(_orgBuilder);
+      _filter.organization = _orgBuilder.Build();
+      return this;
     }
+
+    public IFilterBuilder Financials(Action<IFinancialsBuilder> action)
+    {
+      var _finBuilder = FinancialsBuilder.Create();
+      action(_finBuilder);
+      _filter.financials = _finBuilder.Build();
+      return this;
+    }
+
+    internal Filters Build() => _filter;
   }
 }

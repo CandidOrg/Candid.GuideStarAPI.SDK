@@ -1,11 +1,6 @@
-﻿using Candid.GuideStarAPI.Src.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Candid.GuideStarAPI.Src.Builders
+﻿namespace Candid.GuideStarAPI
 {
-  class SpecificExclusionBuilder : ISpecificExclusionBuilder
+  internal class SpecificExclusionBuilder : ISpecificExclusionBuilder
   {
     protected Specific_Exclusions _exclusions;
 

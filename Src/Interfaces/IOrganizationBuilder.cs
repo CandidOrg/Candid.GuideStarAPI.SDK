@@ -1,10 +1,9 @@
-﻿using Candid.GuideStarAPI.Src.Interfaces;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Candid.GuideStarAPI
 {
-  interface IOrganizationBuilder
+  public interface IOrganizationBuilder
   {
     IOrganizationBuilder HavingProfileLevel(IEnumerable<string> level);
     IOrganizationBuilder HavingNTEEMajorCode(IEnumerable<string> nteeMajorCode);
@@ -13,10 +12,10 @@ namespace Candid.GuideStarAPI
     IOrganizationBuilder HavingFoundationCode(IEnumerable<string> foundationCode);
     IOrganizationBuilder IsOnBMF(bool bmfStatus);
     IOrganizationBuilder IsPub78Verified(bool pubStatus);
-    IAffiliationTypeBuilder AffiliationType();
-    ISpecificExclusionBuilder SpecificExclusions();
-    INumberOfEmployeesBuilder NumberOfEmployees();
-    //IFormTypeBuilder FormTypes()
-    //IAuditBuilder Audits();
+    IOrganizationBuilder AffiliationType(Action<IAffiliationTypeBuilder> action);
+    IOrganizationBuilder SpecificExclusions(Action<ISpecificExclusionBuilder> action);
+    IOrganizationBuilder NumberOfEmployees(Action<IMinMaxBuilder> action);
+    IOrganizationBuilder FormTypes(Action<IFormTypeBuilder> action);
+    IOrganizationBuilder Audits(Action<IAuditBuilder> action);
   }
 }

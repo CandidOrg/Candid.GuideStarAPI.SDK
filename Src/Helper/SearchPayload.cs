@@ -6,32 +6,15 @@ namespace Candid.GuideStarAPI
   public class SearchPayload
   {
     public string search_terms { get; set; }
-    public int from { get; set; }
-    public int size { get; set; }
+    public int? from { get; set; }
+    public int? size { get; set; }
     public Sort sort { get; set; }
     public Filters filters { get; set; }
 
-    public Dictionary<string,string> ToDictionary()
+    public Dictionary<string, string> ToDictionary()
     {
       return JsonSerializer
         .Deserialize<Dictionary<string, string>>(JsonSerializer.Serialize(this)); ;
-    }
-
-    public SearchPayload()
-    {
-      sort = new Sort();
-      filters = new Filters();
-      filters.geography = new Geography();
-      filters.organization = new Organization();
-      filters.organization.affiliation_type = new Affiliation_Type();
-      filters.organization.specific_exclusions = new Specific_Exclusions();
-      filters.organization.number_of_employees_range = new Number_Of_Employees_Range();
-      filters.organization.form_types = new Form_Types();
-      filters.organization.audits = new Audits();
-      filters.financials = new Financials();
-      filters.financials.total_revenue = new Total_Revenue();
-      filters.financials.total_expenses = new Total_Expenses();
-      filters.financials.total_assets = new Total_Assets();
     }
   }
 
@@ -52,7 +35,7 @@ namespace Candid.GuideStarAPI
   {
     public string[] state { get; set; }
     public string zip { get; set; }
-    public int radius { get; set; }
+    public int? radius { get; set; }
     public string[] msa { get; set; }
     public string[] city { get; set; }
     public string[] county { get; set; }
@@ -69,7 +52,7 @@ namespace Candid.GuideStarAPI
     public bool pub78_verified { get; set; }
     public Affiliation_Type affiliation_type { get; set; }
     public Specific_Exclusions specific_exclusions { get; set; }
-    public Number_Of_Employees_Range number_of_employees_range { get; set; }
+    public Min_Max number_of_employees_range { get; set; }
     public Form_Types form_types { get; set; }
     public Audits audits { get; set; }
   }
@@ -88,12 +71,6 @@ namespace Candid.GuideStarAPI
     public bool exclude_defunct_or_merged_organizations { get; set; }
   }
 
-  public class Number_Of_Employees_Range
-  {
-    public int min { get; set; }
-    public int max { get; set; }
-  }
-
   public class Form_Types
   {
     public bool f990 { get; set; }
@@ -108,26 +85,14 @@ namespace Candid.GuideStarAPI
 
   public class Financials
   {
-    public Total_Revenue total_revenue { get; set; }
-    public Total_Expenses total_expenses { get; set; }
-    public Total_Assets total_assets { get; set; }
+    public Min_Max total_revenue { get; set; }
+    public Min_Max total_expenses { get; set; }
+    public Min_Max total_assets { get; set; }
   }
 
-  public class Total_Revenue
+  public class Min_Max
   {
-    public int min { get; set; }
-    public int max { get; set; }
-  }
-
-  public class Total_Expenses
-  {
-    public int min { get; set; }
-    public int max { get; set; }
-  }
-
-  public class Total_Assets
-  {
-    public int min { get; set; }
-    public int max { get; set; }
+    public int? min { get; set; }
+    public int? max { get; set; }
   }
 }
