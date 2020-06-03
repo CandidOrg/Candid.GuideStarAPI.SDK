@@ -34,20 +34,18 @@ steps:
   inputs:
     command: pack
     projects: 'Candid.GuideStarAPI.csproj'
-    includesource: true
-    includesymbols: true
     versioningScheme: byPrereleaseNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
+- task: PublishSymbols@2
+  inputs:
+    SearchPattern: '**/bin/**/*.pdb'
+    SymbolServerType: 'TeamServices'
 - task: DotNetCoreCLI@2
   displayName: 'Push'
   inputs:
     command: 'push'
-    versioningScheme: byPrereleaseNumber
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '6f219f31-982d-413d-a320-c7741368a80d'
