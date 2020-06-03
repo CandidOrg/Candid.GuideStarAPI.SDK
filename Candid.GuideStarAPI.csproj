@@ -5,6 +5,9 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Company>Candid</Company>
+    <Authors>
+      Candid programmers
+    </Authors>
     <Description>SDK to simplify using GuideStar APIs</Description>
     <Copyright>Candid</Copyright>
     <PackageProjectUrl>https://github.com/CandidOrg/APILibrary</PackageProjectUrl>
