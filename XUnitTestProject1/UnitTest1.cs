@@ -1,7 +1,7 @@
-﻿using System;
-using Candid.GuideStarAPI;
+﻿using Candid.GuideStarAPI;
 using Candid.GuideStarApiTest;
 using Microsoft.Extensions.Configuration;
+using System;
 using Xunit;
 
 namespace Candid.GuideStarAPITest

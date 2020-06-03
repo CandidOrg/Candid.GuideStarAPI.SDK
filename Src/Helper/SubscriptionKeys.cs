@@ -20,7 +20,7 @@ namespace Candid.GuideStarAPI
     private int SubscriptionLength = 32;
     public SubscriptionKey(string key)
     {
-      if(key?.Length != SubscriptionLength)
+      if (key?.Length != SubscriptionLength)
       {
         throw new Exception($"Entered SubscriptionKey of incorrect length. Keys should be {SubscriptionLength} characters long");
       }

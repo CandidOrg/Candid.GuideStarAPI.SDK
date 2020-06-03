@@ -1,16 +1,11 @@
-﻿using Candid.GuideStarAPI.Src.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Candid.GuideStarAPI.Src.Builders
+﻿namespace Candid.GuideStarAPI
 {
-  class AffiliationTypeBuilder : IAffiliationTypeBuilder
+  internal class AffiliationTypeBuilder : IAffiliationTypeBuilder
   {
     protected Affiliation_Type _affiliationType;
     private AffiliationTypeBuilder() => _affiliationType = new Affiliation_Type();
 
-    internal static AffiliationTypeBuilder Create() => new AffiliationTypeBuilder(); 
+    internal static AffiliationTypeBuilder Create() => new AffiliationTypeBuilder();
 
     public IAffiliationTypeBuilder OnlyHeadquarters()
     {

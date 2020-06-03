@@ -8,7 +8,7 @@ namespace Candid.GuideStarAPI
 
     public string Content { get; }
 
-    public Response(HttpStatusCode statusCode, string content) 
+    public Response(HttpStatusCode statusCode, string content)
     {
       StatusCode = statusCode;
       Content = content;

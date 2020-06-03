@@ -1,21 +1,15 @@
-﻿using Candid.GuideStarAPI.Src.Builders;
-using Candid.GuideStarAPI.Src.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Candid.GuideStarAPI
 {
-  class OrganizationBuilder : IOrganizationBuilder
+  internal class OrganizationBuilder : IOrganizationBuilder
   {
     protected Organization _organization;
-    protected AffiliationTypeBuilder _affiliationTypeBuilder;
-    protected SpecificExclusionBuilder _specificExclusionBuilder;
-    protected NumberOfEmployeesBuilder _numberOfEmployeesBuilder;
-
-    private OrganizationBuilder() => _organization = new Organization();
     
+    private OrganizationBuilder() => _organization = new Organization();
+
     internal static OrganizationBuilder Create() => new OrganizationBuilder();
 
     public IOrganizationBuilder HavingFoundationCode(IEnumerable<string> foundationCode)
@@ -60,31 +54,46 @@ namespace Candid.GuideStarAPI
       return this;
     }
 
-    public IAffiliationTypeBuilder AffiliationType()
+    public IOrganizationBuilder AffiliationType(Action<IAffiliationTypeBuilder> action)
     {
-      _affiliationTypeBuilder = AffiliationTypeBuilder.Create();
-      return _affiliationTypeBuilder;
-    }
-
-    public ISpecificExclusionBuilder SpecificExclusions()
-    {
-      _specificExclusionBuilder = SpecificExclusionBuilder.Create();
-      return _specificExclusionBuilder;
-    }
-
-    public INumberOfEmployeesBuilder NumberOfEmployees()
-    {
-      _numberOfEmployeesBuilder = NumberOfEmployeesBuilder.Create();
-      return _numberOfEmployeesBuilder;
-    }
-
-    internal Organization Build() {
+      var _affiliationTypeBuilder = AffiliationTypeBuilder.Create();
+      action(_affiliationTypeBuilder);
       _organization.affiliation_type = _affiliationTypeBuilder.Build();
-      _organization.specific_exclusions = _specificExclusionBuilder.Build();
-      //_organization.audits = _auditBuilder.Build();
-      return _organization; 
+      return this;
     }
 
-    
+    public IOrganizationBuilder SpecificExclusions(Action<ISpecificExclusionBuilder> action)
+    {
+      var _specificExclusionBuilder = SpecificExclusionBuilder.Create();
+      action(_specificExclusionBuilder);
+      _organization.specific_exclusions = _specificExclusionBuilder.Build();
+      return this;
+    }
+
+    public IOrganizationBuilder NumberOfEmployees(Action<IMinMaxBuilder> action)
+    {
+      var _numberOfEmployeesBuilder = MinMaxBuilder.Create();
+      action(_numberOfEmployeesBuilder);
+      _organization.number_of_employees_range = _numberOfEmployeesBuilder.Build();
+      return this;
+    }
+
+    public IOrganizationBuilder FormTypes(Action<IFormTypeBuilder> action)
+    {
+      var _formTypesBuilder = FormTypeBuilder.Create();
+      action(_formTypesBuilder);
+      _organization.form_types = _formTypesBuilder.Build();
+      return this;
+    }
+
+    public IOrganizationBuilder Audits(Action<IAuditBuilder> action)
+    {
+      var _auditBuilder = AuditBuilder.Create();
+      action(_auditBuilder);
+      _organization.audits = _auditBuilder.Build();
+      return this;
+    }
+
+    internal Organization Build() => _organization;
   }
 }
