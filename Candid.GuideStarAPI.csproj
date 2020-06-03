@@ -9,7 +9,7 @@
     <Copyright>Candid</Copyright>
     <PackageProjectUrl>https://github.com/CandidOrg/APILibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/CandidOrg/APILibrary</RepositoryUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
