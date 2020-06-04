@@ -8,7 +8,7 @@ namespace Candid.GuideStarAPI
     
     private SearchPayloadBuilder() => _request = new SearchPayload();
 
-    public static ISearchPayloadBuilder Create() => new SearchPayloadBuilder();
+    public static SearchPayloadBuilder Create() => new SearchPayloadBuilder();
 
     public ISearchPayloadBuilder WithSearchTerms(string searchTerms)
     {

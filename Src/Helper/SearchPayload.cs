@@ -14,7 +14,7 @@ namespace Candid.GuideStarAPI
     public Dictionary<string, string> ToDictionary()
     {
       return JsonSerializer
-        .Deserialize<Dictionary<string, string>>(JsonSerializer.Serialize(this)); ;
+        .Deserialize<Dictionary<string, string>>(JsonSerializer.Serialize(this));
     }
   }
 
