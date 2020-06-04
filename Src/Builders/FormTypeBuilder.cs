@@ -1,6 +1,6 @@
 ﻿namespace Candid.GuideStarAPI
 {
-  internal class FormTypeBuilder : IFormTypeBuilder
+  public class FormTypeBuilder
   {
     protected Form_Types _formType;
 
@@ -8,19 +8,19 @@
 
     internal static FormTypeBuilder Create() => new FormTypeBuilder();
 
-    public IFormTypeBuilder Only990tRequired()
+    public FormTypeBuilder Only990tRequired()
     {
       _formType.required_to_file_990t = true;
       return this;
     }
 
-    public IFormTypeBuilder OnlyF990()
+    public FormTypeBuilder OnlyF990()
     {
       _formType.f990 = true;
       return this;
     }
 
-    public IFormTypeBuilder OnlyF990PF()
+    public FormTypeBuilder OnlyF990PF()
     {
       _formType.f990pf = true;
       return this;

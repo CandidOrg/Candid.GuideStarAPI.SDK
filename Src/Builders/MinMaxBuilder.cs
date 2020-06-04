@@ -2,7 +2,7 @@
 
 namespace Candid.GuideStarAPI
 {
-  class MinMaxBuilder : IMinMaxBuilder
+  public class MinMaxBuilder
   {
     protected Min_Max _minMax;
 
@@ -10,7 +10,7 @@ namespace Candid.GuideStarAPI
 
     internal static MinMaxBuilder Create() => new MinMaxBuilder();
 
-    public IMinMaxBuilder HavingMaximum(int numberEmployees)
+    public MinMaxBuilder HavingMaximum(int numberEmployees)
     {
       if (numberEmployees >= 0)
       {
@@ -20,7 +20,7 @@ namespace Candid.GuideStarAPI
       throw new Exception("HavingMaximum must be greater than 0");
     }
 
-    public IMinMaxBuilder HavingMinimum(int numberEmployees)
+    public MinMaxBuilder HavingMinimum(int numberEmployees)
     {
       if (numberEmployees >= 0)
       {

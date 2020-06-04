@@ -2,7 +2,7 @@
 
 namespace Candid.GuideStarAPI
 {
-  public class SearchPayloadBuilder : ISearchPayloadBuilder
+  public class SearchPayloadBuilder
   {
     protected SearchPayload _request;
     
@@ -10,13 +10,13 @@ namespace Candid.GuideStarAPI
 
     public static SearchPayloadBuilder Create() => new SearchPayloadBuilder();
 
-    public ISearchPayloadBuilder WithSearchTerms(string searchTerms)
+    public SearchPayloadBuilder WithSearchTerms(string searchTerms)
     {
       _request.search_terms = searchTerms;
       return this;
     }
 
-    public ISearchPayloadBuilder From(int from)
+    public SearchPayloadBuilder From(int from)
     {
       if (from >= 0)
       {
@@ -26,7 +26,7 @@ namespace Candid.GuideStarAPI
       throw new Exception("From must be greater than 0");
     }
 
-    public ISearchPayloadBuilder Size(int to)
+    public SearchPayloadBuilder Size(int to)
     {
       if (to >= 0)
       {
@@ -36,7 +36,7 @@ namespace Candid.GuideStarAPI
       throw new Exception("To must be greater than 0");
     }
 
-    public ISearchPayloadBuilder Sort(Action<ISortBuilder> action)
+    public SearchPayloadBuilder Sort(Action<SortBuilder> action)
     {
       var _sortBuilder = SortBuilder.Create();
       action(_sortBuilder);
@@ -44,7 +44,7 @@ namespace Candid.GuideStarAPI
       return this;
     }
 
-    public ISearchPayloadBuilder Filters(Action<IFilterBuilder> action)
+    public SearchPayloadBuilder Filters(Action<FilterBuilder> action)
     {
       var _filterBuilder = FilterBuilder.Create();
       action(_filterBuilder);

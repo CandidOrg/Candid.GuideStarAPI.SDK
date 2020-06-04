@@ -2,7 +2,7 @@
 
 namespace Candid.GuideStarAPI
 {
-  class FinancialsBuilder : IFinancialsBuilder
+  public class FinancialsBuilder
   {
     protected Financials _financials;
     
@@ -10,7 +10,7 @@ namespace Candid.GuideStarAPI
 
     internal static FinancialsBuilder Create() => new FinancialsBuilder();
 
-    public IFinancialsBuilder Form990Assets(Action<IMinMaxBuilder> action)
+    public FinancialsBuilder Form990Assets(Action<MinMaxBuilder> action)
     {
       var _f990Assets = MinMaxBuilder.Create();
       action(_f990Assets);
@@ -18,7 +18,7 @@ namespace Candid.GuideStarAPI
       return this;
     }
 
-    public IFinancialsBuilder Form990Expenses(Action<IMinMaxBuilder> action)
+    public FinancialsBuilder Form990Expenses(Action<MinMaxBuilder> action)
     {
       var _f990Expenses = MinMaxBuilder.Create();
       action(_f990Expenses);
@@ -26,7 +26,7 @@ namespace Candid.GuideStarAPI
       return this;
     }
 
-    public IFinancialsBuilder Form990Revenue(Action<IMinMaxBuilder> action)
+    public FinancialsBuilder Form990Revenue(Action<MinMaxBuilder> action)
     {
       var _f990Revenue = MinMaxBuilder.Create();
       action(_f990Revenue);

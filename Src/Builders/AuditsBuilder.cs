@@ -1,6 +1,6 @@
 ﻿namespace Candid.GuideStarAPI
 {
-  class AuditBuilder : IAuditBuilder
+  public class AuditBuilder
   {
     protected Audits _audits;
 
@@ -8,7 +8,7 @@
 
     internal static AuditBuilder Create() => new AuditBuilder();
 
-    public IAuditBuilder HavingA133Audit()
+    public AuditBuilder HavingA133Audit()
     {
       _audits.a_133_audit_performed = true;
       return this;

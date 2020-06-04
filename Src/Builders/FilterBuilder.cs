@@ -2,14 +2,14 @@
 
 namespace Candid.GuideStarAPI
 {
-  internal class FilterBuilder : IFilterBuilder
+  public class FilterBuilder
   {
     protected Filters _filter;
 
     private FilterBuilder() => _filter = new Filters();
     internal static FilterBuilder Create() => new FilterBuilder();
 
-    public IFilterBuilder Geography(Action<IGeographyBuilder> action)
+    public FilterBuilder Geography(Action<GeographyBuilder> action)
     {
       var _geoBuilder = GeographyBuilder.Create();
       action(_geoBuilder);
@@ -17,7 +17,7 @@ namespace Candid.GuideStarAPI
       return this;
     }
 
-    public IFilterBuilder Organization(Action<IOrganizationBuilder> action)
+    public FilterBuilder Organization(Action<OrganizationBuilder> action)
     {
       var _orgBuilder = OrganizationBuilder.Create();
       action(_orgBuilder);
@@ -25,7 +25,7 @@ namespace Candid.GuideStarAPI
       return this;
     }
 
-    public IFilterBuilder Financials(Action<IFinancialsBuilder> action)
+    public FilterBuilder Financials(Action<FinancialsBuilder> action)
     {
       var _finBuilder = FinancialsBuilder.Create();
       action(_finBuilder);

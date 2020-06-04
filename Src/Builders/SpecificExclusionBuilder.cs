@@ -1,6 +1,6 @@
 ﻿namespace Candid.GuideStarAPI
 {
-  internal class SpecificExclusionBuilder : ISpecificExclusionBuilder
+  public class SpecificExclusionBuilder
   {
     protected Specific_Exclusions _exclusions;
 
@@ -8,13 +8,13 @@
 
     internal static SpecificExclusionBuilder Create() => new SpecificExclusionBuilder();
 
-    public ISpecificExclusionBuilder ExcludeDefunctOrMergedOrganizations()
+    public SpecificExclusionBuilder ExcludeDefunctOrMergedOrganizations()
     {
       _exclusions.exclude_defunct_or_merged_organizations = true;
       return this;
     }
 
-    public ISpecificExclusionBuilder ExcludeRevokedOrganizations()
+    public SpecificExclusionBuilder ExcludeRevokedOrganizations()
     {
       _exclusions.exclude_revoked_organizations = true;
       return this;
