@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Candid.GuideStarAPI
 {
-  public class GeographyBuilder : IGeographyBuilder
+  internal class GeographyBuilder : IGeographyBuilder
   {
     protected Geography _geography;
 
@@ -29,7 +29,7 @@ namespace Candid.GuideStarAPI
 
     public IGeographyBuilder WithinZipRadius(int zipRadius)
     {
-      if (zipRadius > 0)
+      if (zipRadius >= 0)
       {
         _geography.radius = zipRadius;
         return this;

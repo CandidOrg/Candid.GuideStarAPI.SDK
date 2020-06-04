@@ -1,7 +1,10 @@
-﻿namespace Candid.GuideStarAPI
+﻿using System;
+
+namespace Candid.GuideStarAPI
 {
   public interface IFilterBuilder
   {
-    IGeographyBuilder Geography();
+    IFilterBuilder Geography(Action<IGeographyBuilder> action);
+    IFilterBuilder Organization(Action<IOrganizationBuilder> action);
   }
 }

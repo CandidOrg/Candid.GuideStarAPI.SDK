@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Candid.GuideStarAPI.Src.Interfaces
+﻿namespace Candid.GuideStarAPI
 {
-  interface IAffiliationTypeBuilder
+  public interface IAffiliationTypeBuilder
   {
     IAffiliationTypeBuilder OnlyParents();
     IAffiliationTypeBuilder OnlySubordinate();
