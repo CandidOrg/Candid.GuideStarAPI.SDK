@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Candid.GuideStarAPI.Resources
 {
-  class EssentialsResource : AbstractResource
+  public class EssentialsResource : AbstractResource
   {
     public static string GetOrganization(SearchPayload form)
     {
