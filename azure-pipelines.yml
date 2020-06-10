@@ -29,11 +29,11 @@ steps:
     command: 'build'
     projects: '.\Candid.GuideStarAPI\Candid.GuideStarAPI.csproj'
     versioningScheme: 'byPrereleaseNumber'
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   displayName: 'Pack'
   inputs:
     command: pack
-    projects: 'Candid.GuideStarAPI.csproj'
+    packagesToPack: '**\\*.csproj;!**\\*.Tests.csproj'
     versioningScheme: byPrereleaseNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
