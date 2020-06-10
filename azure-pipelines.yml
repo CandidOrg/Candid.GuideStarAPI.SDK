@@ -33,7 +33,7 @@ steps:
   displayName: 'Pack'
   inputs:
     command: pack
-    packagesToPack: '**\\*.csproj;!**\\*.Tests.csproj'
+    packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
     versioningScheme: byPrereleaseNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
