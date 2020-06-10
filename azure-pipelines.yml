@@ -19,7 +19,7 @@ steps:
   displayName: 'Restore'
   inputs:
     command: 'restore'
-    projects: '.\Candid.GuideStarAPI\Candid.GuideStarAPI.csproj'
+    projects: './Candid.GuideStarAPI/Candid.GuideStarAPI.csproj'
     verbosityRestore: 'Normal'
     feedsToUse: 'select'
     includeNuGetOrg: true
@@ -27,7 +27,7 @@ steps:
   displayName: 'Build'
   inputs:
     command: 'build'
-    projects: '.\Candid.GuideStarAPI\Candid.GuideStarAPI.csproj'
+    projects: './Candid.GuideStarAPI/Candid.GuideStarAPI.csproj'
     versioningScheme: 'byPrereleaseNumber'
 - task: DotNetCoreCLI@2
   displayName: 'Pack'
@@ -40,7 +40,7 @@ steps:
     patchVersion: '$(Patch)'
 - task: PublishSymbols@2
   inputs:
-    SearchPattern: '.\Candid.GuideStarAPI\bin\**\*.pdb'
+    SearchPattern: './Candid.GuideStarAPI/bin/**/*.pdb'
     SymbolServerType: 'TeamServices'
 - task: DotNetCoreCLI@2
   displayName: 'Push'
