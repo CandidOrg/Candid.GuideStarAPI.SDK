@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -67,7 +68,15 @@ namespace Candid.GuideStarAPI
       var httpRequest = BuildHttpRequest(request);
       if (!Equals(request.Method, HttpMethod.Get))
       {
-        httpRequest.Content = new FormUrlEncodedContent(request.PostParams);
+        if (request.PostParamsDict?.Any() ?? false)
+        {
+          httpRequest.Content = new FormUrlEncodedContent(request.PostParamsDict);
+        }
+        else
+        {
+          httpRequest.Content = new StringContent(request.PostParams);
+          httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        }
       }
 
       var httpResponse = await HttpClient.SendAsync(httpRequest).ConfigureAwait(false);

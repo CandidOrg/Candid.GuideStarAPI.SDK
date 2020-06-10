@@ -25,7 +25,7 @@ namespace Candid.GuideStarAPI.Resources
         HttpMethod.Post,
         GuideStarClient.GetSubscriptionKey(),
         Domain.EssentialsV2,
-        postParams: payload.ToDictionary()
+        postParams: payload.ToJson()
       );
     }
   }

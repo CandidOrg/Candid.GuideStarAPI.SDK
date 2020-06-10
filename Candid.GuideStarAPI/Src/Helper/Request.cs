@@ -29,7 +29,12 @@ namespace Candid.GuideStarAPI
     /// <summary>
     /// Post params
     /// </summary>
-    public IDictionary<string, string> PostParams { get; private set; }
+    public IDictionary<string, string> PostParamsDict { get; private set; }
+
+    /// <summary>
+    /// Post params
+    /// </summary>
+    public string PostParams { get; private set; }
 
     /// <summary>
     /// Create a new Twilio request
@@ -50,7 +55,31 @@ namespace Candid.GuideStarAPI
       Method = method;
       SubscriptionKey = subscriptionKey;
       QueryParam = queryParam ?? string.Empty;
-      PostParams = postParams ?? new Dictionary<string, string>();
+      PostParamsDict = postParams ?? new Dictionary<string, string>();
+
+      Uri = ConstructUrl(new Uri("https://apidata.guidestar.org/" + uri), QueryParam);
+    }
+
+    /// <summary>
+    /// Create a new Twilio request
+    /// </summary>
+    /// <param name="method">HTTP method</param>
+    /// <param name="uri">Request URI</param>
+    /// <param name="region">Twilio region</param>
+    /// <param name="queryParams">Query parameters</param>
+    /// <param name="postParams">Post data</param>
+    public Request(
+        HttpMethod method,
+        SubscriptionKey subscriptionKey,
+        Domain uri,
+        string postParams,
+        string queryParam = null
+    )
+    {
+      Method = method;
+      SubscriptionKey = subscriptionKey;
+      QueryParam = queryParam ?? string.Empty;
+      PostParams = postParams ?? string.Empty;
 
       Uri = ConstructUrl(new Uri("https://apidata.guidestar.org/" + uri), QueryParam);
     }
@@ -96,7 +125,7 @@ namespace Candid.GuideStarAPI
     /// <returns>Encoded byte array</returns>
     public byte[] EncodePostParams()
     {
-      return Encoding.UTF8.GetBytes(EncodeParameters(PostParams));
+      return Encoding.UTF8.GetBytes(EncodeParameters(PostParamsDict));
     }
 
     /// <summary>
@@ -106,7 +135,7 @@ namespace Candid.GuideStarAPI
     /// <param name="value">value of parameter</param>
     public void AddPostParam(string name, string value)
     {
-      AddParam(PostParams, name, value);
+      AddParam(PostParamsDict, name, value);
     }
 
     private static void AddParam(IDictionary<string, string> dict, string name, string value)

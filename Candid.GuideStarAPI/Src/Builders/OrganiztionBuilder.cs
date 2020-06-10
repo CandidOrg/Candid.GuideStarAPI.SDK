@@ -7,7 +7,7 @@ namespace Candid.GuideStarAPI
   public class OrganizationBuilder
   {
     protected Organization _organization;
-    
+
     private OrganizationBuilder() => _organization = new Organization();
 
     internal static OrganizationBuilder Create() => new OrganizationBuilder();

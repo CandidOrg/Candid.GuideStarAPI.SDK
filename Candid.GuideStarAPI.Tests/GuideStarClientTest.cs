@@ -3,6 +3,8 @@ using Candid.GuideStarAPI;
 using Candid.GuideStarAPI.Resources;
 using Candid.GuideStarApiTest;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Candid.GuideStarAPITest
@@ -55,6 +57,10 @@ namespace Candid.GuideStarAPITest
       GuideStarClient.Init(PREMIER_KEY);
       var premier = PremierResource.GetOrganization("13-1837418");
 
+      var result = JsonConvert.DeserializeObject<JObject>(premier);
+      result.TryGetValue("code", out var response);
+      Assert.True(response.Value<string>() == "200");
+
       Assert.NotNull(premier);
     }
 
@@ -63,8 +69,39 @@ namespace Candid.GuideStarAPITest
     {
       GuideStarClient.Init(CHARITY_CHECK_KEY);
       var charitycheck = CharityCheckResource.GetCharityCheck("13-1837418");
+      
+      var result = JsonConvert.DeserializeObject<JObject>(charitycheck);
+      result.TryGetValue("code", out var response);
+      Assert.True(response.Value<string>() == "200");
 
       Assert.NotNull(charitycheck);
+    }
+
+    [Fact]
+    public void GuideStarEssentialsCheckResourceWorks()
+    {
+      // return guidestar as search result.  expecting 200 result
+      GuideStarClient.Init(ESSENTIALS_KEY);
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("guidestar")
+        .Filters(
+          filterBuilder => filterBuilder
+          .Organization(
+              organizationBuilder => organizationBuilder.IsOnBMF(true)
+                    .SpecificExclusions(
+                        seBuilder => seBuilder.ExcludeDefunctOrMergedOrganizations()
+                                              .ExcludeRevokedOrganizations()
+                      )
+                  )
+          .Geography(
+              g => g.HavingCounty(new string[] { "James City" })
+          )
+      ).Build();
+      var essentials = EssentialsResource.GetOrganization(payload);
+      var result = JsonConvert.DeserializeObject<JObject>(essentials);
+      result.TryGetValue("code", out var response);
+      Assert.True(response.Value<string>() == "200");
+      Assert.NotNull(essentials);
     }
   }
 }

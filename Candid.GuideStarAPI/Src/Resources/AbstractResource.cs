@@ -27,7 +27,7 @@ namespace Candid.GuideStarAPI.Resources
         HttpMethod.Get,
         GuideStarClient.GetSubscriptionKey(),
         domain,
-        ein.EinString
+        queryParam: ein.EinString
       );
     }
   }

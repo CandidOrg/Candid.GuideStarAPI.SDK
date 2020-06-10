@@ -5,7 +5,7 @@ namespace Candid.GuideStarAPI
   public class SearchPayloadBuilder
   {
     protected SearchPayload _request;
-    
+
     private SearchPayloadBuilder() => _request = new SearchPayload();
 
     public static SearchPayloadBuilder Create() => new SearchPayloadBuilder();
