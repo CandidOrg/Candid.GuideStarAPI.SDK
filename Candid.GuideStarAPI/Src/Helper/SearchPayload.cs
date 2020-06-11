@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using System.Collections.Generic;
 
 namespace Candid.GuideStarAPI
@@ -11,20 +11,14 @@ namespace Candid.GuideStarAPI
     public Sort sort { get; set; }
     public Filters filters { get; set; }
 
-    public Dictionary<string, object> ToDictionary()
-    {
-      // remove null fields
-      return JsonConvert.DeserializeObject<Dictionary<string, object>>(
-        JsonConvert.SerializeObject(
-          this, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
-
-    }
-
     public string ToJson()
     {
+      var options = new JsonSerializerOptions
+      {
+        IgnoreNullValues = true,
+      };
       // remove null fields
-      return JsonConvert.SerializeObject(
-          this, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+      return JsonSerializer.Serialize(this, options);
     }
   }
 

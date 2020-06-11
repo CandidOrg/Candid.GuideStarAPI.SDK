@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Text.Json;
 using Candid.GuideStarAPI;
 using Candid.GuideStarAPI.Resources;
 using Candid.GuideStarApiTest;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Candid.GuideStarAPITest
@@ -57,9 +56,10 @@ namespace Candid.GuideStarAPITest
       GuideStarClient.Init(PREMIER_KEY);
       var premier = PremierResource.GetOrganization("13-1837418");
 
-      var result = JsonConvert.DeserializeObject<JObject>(premier);
-      result.TryGetValue("code", out var response);
-      Assert.True(response.Value<string>() == "200");
+      var result = JsonDocument.Parse(premier);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
 
       Assert.NotNull(premier);
     }
@@ -69,10 +69,11 @@ namespace Candid.GuideStarAPITest
     {
       GuideStarClient.Init(CHARITY_CHECK_KEY);
       var charitycheck = CharityCheckResource.GetCharityCheck("13-1837418");
-      
-      var result = JsonConvert.DeserializeObject<JObject>(charitycheck);
-      result.TryGetValue("code", out var response);
-      Assert.True(response.Value<string>() == "200");
+
+      var result = JsonDocument.Parse(charitycheck);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
 
       Assert.NotNull(charitycheck);
     }
@@ -98,9 +99,11 @@ namespace Candid.GuideStarAPITest
           )
       ).Build();
       var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonConvert.DeserializeObject<JObject>(essentials);
-      result.TryGetValue("code", out var response);
-      Assert.True(response.Value<string>() == "200");
+      var result = JsonDocument.Parse(essentials);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
       Assert.NotNull(essentials);
     }
   }
