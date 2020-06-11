@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using Candid.GuideStarAPI;
 using Candid.GuideStarAPI.Resources;
 using Candid.GuideStarApiTest;
@@ -55,6 +56,11 @@ namespace Candid.GuideStarAPITest
       GuideStarClient.Init(PREMIER_KEY);
       var premier = PremierResource.GetOrganization("13-1837418");
 
+      var result = JsonDocument.Parse(premier);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
       Assert.NotNull(premier);
     }
 
@@ -64,7 +70,41 @@ namespace Candid.GuideStarAPITest
       GuideStarClient.Init(CHARITY_CHECK_KEY);
       var charitycheck = CharityCheckResource.GetCharityCheck("13-1837418");
 
+      var result = JsonDocument.Parse(charitycheck);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
       Assert.NotNull(charitycheck);
+    }
+
+    [Fact]
+    public void GuideStarEssentialsCheckResourceWorks()
+    {
+      // return guidestar as search result.  expecting 200 result
+      GuideStarClient.Init(ESSENTIALS_KEY);
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("guidestar")
+        .Filters(
+          filterBuilder => filterBuilder
+          .Organization(
+              organizationBuilder => organizationBuilder.IsOnBMF(true)
+                    .SpecificExclusions(
+                        seBuilder => seBuilder.ExcludeDefunctOrMergedOrganizations()
+                                              .ExcludeRevokedOrganizations()
+                      )
+                  )
+          .Geography(
+              g => g.HavingCounty(new string[] { "James City" })
+          )
+      ).Build();
+      var essentials = EssentialsResource.GetOrganization(payload);
+      var result = JsonDocument.Parse(essentials);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
+      Assert.NotNull(essentials);
     }
   }
 }

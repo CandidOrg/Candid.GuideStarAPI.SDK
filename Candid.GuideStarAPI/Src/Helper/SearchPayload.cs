@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Text.Json;
+using System.Collections.Generic;
 
 namespace Candid.GuideStarAPI
 {
@@ -11,19 +11,21 @@ namespace Candid.GuideStarAPI
     public Sort sort { get; set; }
     public Filters filters { get; set; }
 
-    public Dictionary<string, string> ToDictionary()
+    public string ToJson()
     {
+      var options = new JsonSerializerOptions
+      {
+        IgnoreNullValues = true,
+      };
       // remove null fields
-      return JsonSerializer
-        .Deserialize<Dictionary<string, string>>(JsonSerializer.Serialize(this, new JsonSerializerOptions() {IgnoreNullValues = true}
-      ));
+      return JsonSerializer.Serialize(this, options);
     }
   }
 
   public class Sort
   {
     public string sort_by { get; set; }
-    public bool ascending { get; set; }
+    public bool? ascending { get; set; }
   }
 
   public class Filters
@@ -50,8 +52,8 @@ namespace Candid.GuideStarAPI
     public string[] ntee_minor_codes { get; set; }
     public string[] subsection_codes { get; set; }
     public string[] foundation_codes { get; set; }
-    public bool bmf_status { get; set; }
-    public bool pub78_verified { get; set; }
+    public bool? bmf_status { get; set; }
+    public bool? pub78_verified { get; set; }
     public Affiliation_Type affiliation_type { get; set; }
     public Specific_Exclusions specific_exclusions { get; set; }
     public Min_Max number_of_employees_range { get; set; }
@@ -61,28 +63,28 @@ namespace Candid.GuideStarAPI
 
   public class Affiliation_Type
   {
-    public bool parent { get; set; }
-    public bool subordinate { get; set; }
-    public bool independent { get; set; }
-    public bool headquarter { get; set; }
+    public bool? parent { get; set; }
+    public bool? subordinate { get; set; }
+    public bool? independent { get; set; }
+    public bool? headquarter { get; set; }
   }
 
   public class Specific_Exclusions
   {
-    public bool exclude_revoked_organizations { get; set; }
-    public bool exclude_defunct_or_merged_organizations { get; set; }
+    public bool? exclude_revoked_organizations { get; set; }
+    public bool? exclude_defunct_or_merged_organizations { get; set; }
   }
 
   public class Form_Types
   {
-    public bool f990 { get; set; }
-    public bool f990pf { get; set; }
-    public bool required_to_file_990t { get; set; }
+    public bool? f990 { get; set; }
+    public bool? f990pf { get; set; }
+    public bool? required_to_file_990t { get; set; }
   }
 
   public class Audits
   {
-    public bool a_133_audit_performed { get; set; }
+    public bool? a_133_audit_performed { get; set; }
   }
 
   public class Financials

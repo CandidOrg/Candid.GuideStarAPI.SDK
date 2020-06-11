@@ -5,7 +5,7 @@ namespace Candid.GuideStarAPI
   public class FinancialsBuilder
   {
     protected Financials _financials;
-    
+
     private FinancialsBuilder() => _financials = new Financials();
 
     internal static FinancialsBuilder Create() => new FinancialsBuilder();
