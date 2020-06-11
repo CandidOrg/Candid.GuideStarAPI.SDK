@@ -39,11 +39,6 @@ namespace Candid.GuideStarAPI
     /// <returns>The rest client</returns>
     public static RestClient GetRestClient()
     {
-      if (_client != null)
-      {
-        return _client;
-      }
-
       if (_subscriptionKeys?.IsEmpty() ?? false)
       {
         //TODO: Add authentication exception
