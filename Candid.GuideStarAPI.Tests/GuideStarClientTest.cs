@@ -68,7 +68,21 @@ namespace Candid.GuideStarAPITest
     public void GuideStarCharityCheckResourceWorks()
     {
       GuideStarClient.Init(CHARITY_CHECK_KEY);
-      var charitycheck = CharityCheckResource.GetCharityCheck("13-1837418");
+      var charitycheck = CharityCheckResource.GetOrganization("13-1837418");
+      var result = JsonDocument.Parse(charitycheck);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+    }
+
+    [Fact]
+    public void GuideStarReInitWorks()
+    {
+      GuideStarClient.Init(PREMIER_KEY);
+      var premier = PremierResource.GetOrganization("13-1837418");
+
+      GuideStarClient.Init(CHARITY_CHECK_KEY);
+      var charitycheck = CharityCheckResource.GetOrganization("13-1837418");
 
       var result = JsonDocument.Parse(charitycheck);
       result.RootElement.TryGetProperty("code", out var response);
@@ -76,6 +90,7 @@ namespace Candid.GuideStarAPITest
       Assert.True(code == 200);
 
       Assert.NotNull(charitycheck);
+      Assert.Contains("charity", charitycheck);
     }
 
     [Fact]

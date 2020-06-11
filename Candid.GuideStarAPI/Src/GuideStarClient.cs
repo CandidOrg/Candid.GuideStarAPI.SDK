@@ -8,9 +8,6 @@ namespace Candid.GuideStarAPI
     private static SubscriptionKey _subscriptionKey;
     private static readonly string _baseUrl = "https://apidata.guidestar.org";
 
-    // Init a static HttpClient with our base url to make calls with
-    private static RestClient _client;
-
     /// <summary>
     /// Initializes GuideStarClient. Required call for GuideStarClient to work.
     /// </summary>
@@ -47,8 +44,7 @@ namespace Candid.GuideStarAPI
         );
       }
 
-      _client = new RestClient(_subscriptionKey, _baseUrl);
-      return _client;
+      return new RestClient(_subscriptionKey, _baseUrl);
     }
 
     public static SubscriptionKey GetSubscriptionKey()

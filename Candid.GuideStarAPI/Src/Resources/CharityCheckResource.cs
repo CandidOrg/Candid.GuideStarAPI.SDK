@@ -4,7 +4,7 @@ namespace Candid.GuideStarAPI.Resources
 {
   public class CharityCheckResource : AbstractResource
   {
-    public static string GetCharityCheck(string ein)
+    public static string GetOrganization(string ein)
     {
       var EIN = new EIN(ein);
 
