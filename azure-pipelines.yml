@@ -19,7 +19,7 @@ steps:
   displayName: 'Restore'
   inputs:
     command: 'restore'
-    projects: './Candid.GuideStarAPI/Candid.GuideStarAPI.csproj'
+    projects: '**/*.csproj'
     verbosityRestore: 'Normal'
     feedsToUse: 'select'
     includeNuGetOrg: true
@@ -27,14 +27,13 @@ steps:
   displayName: 'Build'
   inputs:
     command: 'build'
-    projects: './Candid.GuideStarAPI/Candid.GuideStarAPI.csproj'
+    projects: '**/*.csproj'
     versioningScheme: 'byPrereleaseNumber'
 - task: DotNetCoreCLI@2
   displayName: 'Test'
   inputs:
     command: 'test'
-    projects: './Candid.GuideStarAPI/Candid.GuideStarAPI.csproj'
-    versioningScheme: 'byPrereleaseNumber'
+    projects: '**/*.Tests.csproj'
 - task: DotNetCoreCLI@2
   displayName: 'Pack'
   inputs:
