@@ -4,52 +4,33 @@ namespace Candid.GuideStarAPI
 {
   public class GuideStarClient
   {
-    private static SubscriptionKeys _subscriptionKeys;
-    private static SubscriptionKey _subscriptionKey;
-    private static readonly string _baseUrl = "https://apidata.guidestar.org";
+    private static SubscriptionKey _defaultSubscriptionKey = null;
+    private static readonly string _baseUrl = @"https://apidata.guidestar.org";
 
     /// <summary>
-    /// Initializes GuideStarClient. Required call for GuideStarClient to work.
+    /// Initializes GuideStarClient with default subscription key
+    /// Recommended use is to set all subscription keys with GuideStarClient.SubscriptionKeys.Add()
     /// </summary>
-    /// <param name="subscriptionKey">Your API subscription key</param>
-    public static void Init(SubscriptionKeys subscriptionKeys)
+    /// <param name="defaultSubscriptionKey">Your API subscription key</param>
+    public static void SetDefaultSubscriptionKey(string defaultSubscriptionKey)
     {
-      if (subscriptionKeys.IsEmpty())
-      {
-        throw new ArgumentException("SubscriptionKey cannot be null or whitespace");
-      }
-      _subscriptionKeys = subscriptionKeys;
+      _defaultSubscriptionKey = new SubscriptionKey(defaultSubscriptionKey);
     }
 
-    /// <summary>
-    /// Initializes GuideStarClient. Required call for GuideStarClient to work.
-    /// </summary>
-    /// <param name="subscriptionKey">Your API subscription key</param>
-    public static void Init(string subscriptionKey)
-    {
-      _subscriptionKey = new SubscriptionKey(subscriptionKey);
-    }
+    public static SubscriptionKeys SubscriptionKeys { get; private set; } = new SubscriptionKeys();
 
     /// <summary>
     /// Get the rest client
     /// </summary>
     /// <returns>The rest client</returns>
-    public static RestClient GetRestClient()
+    public static RestClient GetRestClient(SubscriptionKey subscriptionKey = null)
     {
-      if (_subscriptionKeys?.IsEmpty() ?? false)
-      {
-        //TODO: Add authentication exception
-        throw new Exception(
-            "TwilioRestClient was used before AccountSid and AuthToken were set, please call TwilioClient.init()"
-        );
-      }
-
-      return new RestClient(_subscriptionKey, _baseUrl);
+      return new RestClient(subscriptionKey ?? _defaultSubscriptionKey, _baseUrl);
     }
 
-    public static SubscriptionKey GetSubscriptionKey()
+    public static SubscriptionKey GetDefaultSubscriptionKey()
     {
-      return _subscriptionKey;
+      return _defaultSubscriptionKey;
     }
   }
 }

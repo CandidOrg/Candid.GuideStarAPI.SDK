@@ -7,7 +7,7 @@ namespace Candid.GuideStarAPI.Resources
     public static string GetOrganization(string ein)
     {
       var EIN = new EIN(ein);
-
+      
       var response = Get(BuildGetRequest(EIN, Domain.CharityCheckV1));
 
       return response;

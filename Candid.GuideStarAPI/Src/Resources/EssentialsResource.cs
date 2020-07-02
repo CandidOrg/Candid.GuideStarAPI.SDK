@@ -21,12 +21,7 @@ namespace Candid.GuideStarAPI.Resources
 
     private static Request BuildPostEssentialsRequest(SearchPayload payload)
     {
-      return new Request(
-        HttpMethod.Post,
-        GuideStarClient.GetSubscriptionKey(),
-        Domain.EssentialsV2,
-        postParams: payload.ToJson()
-      );
+      return BuildPostRequest(Domain.EssentialsV2, payload.ToJson());
     }
   }
 }
