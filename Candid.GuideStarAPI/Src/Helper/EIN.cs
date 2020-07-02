@@ -6,8 +6,8 @@ namespace Candid.GuideStarAPI
   public sealed class EIN
   {
     public readonly string EinString;
-    private static Regex ein_regex = new Regex(@"^\d\d-\d\d\d\d\d\d\d$");
-    private static Regex numeric_regex = new Regex(@"^(\d\d)(\d\d\d\d\d\d\d)$");
+    private static Regex ein_regex = new Regex(@"^\d{2}-\d{7}$");
+    private static Regex numeric_regex = new Regex(@"^(\d{2})(\d{7})$");
 
     public EIN(string ein)
     {
