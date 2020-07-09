@@ -48,7 +48,7 @@ var payload = SearchPayloadBuilder.Create()
     )
 ).Build();
 
-GuideStarClient.Init(ESSENTIALS_KEY);
+GuideStarClient.SubscriptionKeys.Add(Domain.EssentialsV2, ESSENTIALS_KEY);
 var essentials = EssentialsResource.GetOrganization(payload);
 ```
 
