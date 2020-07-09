@@ -24,36 +24,49 @@ namespace Candid.GuideStarAPITest
       CHARITY_CHECK_PDF_KEY = _config["Keys:CHARITY_CHECK_PDF_KEY"];
       ESSENTIALS_KEY = _config["Keys:ESSENTIALS_KEY"];
       PREMIER_KEY = _config["Keys:PREMIER_KEY"];
+
+      SetSubscriptionKeys();
     }
+
+    private static void SetSubscriptionKeys()
+    {
+      // Only do this once
+      if (!GuideStarClient.SubscriptionKeys.IsEmpty())
+        return;
+      if (!string.IsNullOrEmpty(CHARITY_CHECK_KEY))
+        GuideStarClient.SubscriptionKeys.Add(Domain.CharityCheckV1, CHARITY_CHECK_KEY);
+      if (!string.IsNullOrEmpty(ESSENTIALS_KEY))
+        GuideStarClient.SubscriptionKeys.Add(Domain.EssentialsV2, ESSENTIALS_KEY);
+      if (!string.IsNullOrEmpty(PREMIER_KEY))
+        GuideStarClient.SubscriptionKeys.Add(Domain.PremierV3, PREMIER_KEY);
+    }
+
     [Fact]
     public void GuideStarApiClientInitWorks()
     {
-      GuideStarClient.Init(PREMIER_KEY);
+      GuideStarClient.SetDefaultSubscriptionKey(PREMIER_KEY);
 
-      Assert.NotNull(GuideStarClient.GetSubscriptionKey());
-      Assert.NotNull(GuideStarClient.GetSubscriptionKey().SubscriptionString);
+      Assert.NotNull(GuideStarClient.GetDefaultSubscriptionKey());
+      Assert.NotNull(GuideStarClient.GetDefaultSubscriptionKey().Primary);
     }
 
     [Fact]
     public void GuideStarApiClientInitThrowsException()
     {
-      Assert.Throws<Exception>(() => GuideStarClient.Init(""));
-      Assert.Throws<Exception>(() => GuideStarClient.Init(subscriptionKey: null));
-      Assert.Throws<Exception>(() => GuideStarClient.Init(PREMIER_KEY + " "));
+      Assert.Throws<Exception>(() => GuideStarClient.SetDefaultSubscriptionKey(""));
+      Assert.Throws<Exception>(() => GuideStarClient.SetDefaultSubscriptionKey(defaultSubscriptionKey: null));
+      Assert.Throws<Exception>(() => GuideStarClient.SetDefaultSubscriptionKey(PREMIER_KEY + " "));
     }
 
     [Fact]
     public void GuideStarApiClientGetRestClientWorks()
     {
-      GuideStarClient.Init(PREMIER_KEY);
-
       Assert.NotNull(GuideStarClient.GetRestClient());
     }
 
     [Fact]
     public void GuideStarPremierResourceWorks()
     {
-      GuideStarClient.Init(PREMIER_KEY);
       var premier = PremierResource.GetOrganization("13-1837418");
 
       var result = JsonDocument.Parse(premier);
@@ -67,7 +80,6 @@ namespace Candid.GuideStarAPITest
     [Fact]
     public void GuideStarCharityCheckResourceWorks()
     {
-      GuideStarClient.Init(CHARITY_CHECK_KEY);
       var charitycheck = CharityCheckResource.GetOrganization("13-1837418");
       var result = JsonDocument.Parse(charitycheck);
       result.RootElement.TryGetProperty("code", out var response);
@@ -78,10 +90,7 @@ namespace Candid.GuideStarAPITest
     [Fact]
     public void GuideStarReInitWorks()
     {
-      GuideStarClient.Init(PREMIER_KEY);
       var premier = PremierResource.GetOrganization("13-1837418");
-
-      GuideStarClient.Init(CHARITY_CHECK_KEY);
       var charitycheck = CharityCheckResource.GetOrganization("13-1837418");
 
       var result = JsonDocument.Parse(charitycheck);
@@ -97,7 +106,6 @@ namespace Candid.GuideStarAPITest
     public void GuideStarEssentialsCheckResourceWorks()
     {
       // return guidestar as search result.  expecting 200 result
-      GuideStarClient.Init(ESSENTIALS_KEY);
       var payload = SearchPayloadBuilder.Create()
         .WithSearchTerms("guidestar")
         .Filters(
@@ -120,6 +128,35 @@ namespace Candid.GuideStarAPITest
       Assert.True(code == 200);
 
       Assert.NotNull(essentials);
+    }
+
+    [Fact]
+    public void GuideStarClient_SubscriptionKeys_Works()
+    {
+      GuideStarClient.SubscriptionKeys.Clear();
+      SetSubscriptionKeys();
+      Assert.NotEmpty(GuideStarClient.SubscriptionKeys);
+    }
+
+    [Fact]
+    public void GuideStarClient_BadSubscriptionKey_Expect401()
+    {
+      GuideStarClient.SubscriptionKeys[Domain.PremierV3] = new SubscriptionKey("01234567890123456789012345678901"); // 32
+      
+      try
+      {
+        var premier = PremierResource.GetOrganization("13-1837418");
+        Assert.True(false); // Fail - shouldn't have worked
+      }
+      catch (ApiException ex)
+      {
+        Assert.NotNull(ex.Response);
+        Assert.Equal(System.Net.HttpStatusCode.Unauthorized, ex.Response.StatusCode);
+      }
+      catch (Exception)
+      {
+        Assert.True(false); // Fail - wrong exception type
+      }
     }
   }
 }

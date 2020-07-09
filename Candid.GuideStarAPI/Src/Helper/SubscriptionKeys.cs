@@ -1,31 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Candid.GuideStarAPI
 {
-  public sealed class SubscriptionKeys
+  public sealed class SubscriptionKeys : Dictionary<Domain, SubscriptionKey>
   {
-    public readonly SubscriptionKey EssentialsKey;
-    public readonly SubscriptionKey PremierKey;
-    public readonly SubscriptionKey CharityCheckKey;
-
-    internal bool IsEmpty()
+    internal SubscriptionKeys()
     {
-      return EssentialsKey == null && PremierKey == null && CharityCheckKey == null;
+    }
+
+    public new void Add(Domain domain, SubscriptionKey key)
+    {
+      if (ContainsKey(domain))
+        throw new Exception($"Subscription list already contains value for domain '${domain.ToString()}'");
+      else
+        base.Add(domain, key);
+    }
+
+    public void Add(Domain domain, string primary, string secondary = null)
+    {
+      Add(domain, new SubscriptionKey(primary, secondary));
+    }
+
+    public bool IsEmpty()
+    {
+      return (Count == 0);
     }
   }
 
   public sealed class SubscriptionKey
   {
-    public readonly string SubscriptionString;
-    private int SubscriptionLength = 32;
-    public SubscriptionKey(string key)
+    private const int SubscriptionLength = 32;
+
+    public SubscriptionKey(string primaryKey, string secondaryKey = null)
     {
-      if (key?.Length != SubscriptionLength)
+      if ((primaryKey?.Length != SubscriptionLength) ||
+        (!string.IsNullOrEmpty(secondaryKey) && secondaryKey?.Length != SubscriptionLength))
       {
         throw new Exception($"Entered SubscriptionKey of incorrect length. Keys should be {SubscriptionLength} characters long");
       }
 
-      SubscriptionString = key;
+      Primary = primaryKey;
+      Secondary = secondaryKey;
     }
+
+    public string Primary { get; private set; }
+    public string Secondary { get; private set; }
   }
 }

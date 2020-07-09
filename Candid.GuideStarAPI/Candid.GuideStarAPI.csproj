@@ -13,16 +13,13 @@
     <PackageProjectUrl>https://github.com/CandidOrg/APILibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/CandidOrg/APILibrary</RepositoryUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <UserSecretsId>bff8309b-bfaa-475c-8443-78a5ce4f88f9</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="XUnitTestProject1\**" />
     <EmbeddedResource Remove="XUnitTestProject1\**" />
     <None Remove="XUnitTestProject1\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Src\Exceptions\" />
   </ItemGroup>
 
   <ItemGroup>
