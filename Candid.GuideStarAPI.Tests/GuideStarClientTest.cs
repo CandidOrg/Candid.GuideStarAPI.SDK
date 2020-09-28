@@ -10,18 +10,15 @@ namespace Candid.GuideStarAPITest
 {
   public class GuideStarClientTest
   {
-    private IConfiguration _config;
+    private readonly IConfiguration _config;
     private static string CHARITY_CHECK_KEY;
-    private static string CHARITY_CHECK_PDF_KEY;
     private static string ESSENTIALS_KEY;
     private static string PREMIER_KEY;
-    private static string GUIDESTAR_EIN = "";
 
     public GuideStarClientTest()
     {
       _config = ConfigLoader.InitConfiguration();
       CHARITY_CHECK_KEY = _config["Keys:CHARITY_CHECK_KEY"];
-      CHARITY_CHECK_PDF_KEY = _config["Keys:CHARITY_CHECK_PDF_KEY"];
       ESSENTIALS_KEY = _config["Keys:ESSENTIALS_KEY"];
       PREMIER_KEY = _config["Keys:PREMIER_KEY"];
 
