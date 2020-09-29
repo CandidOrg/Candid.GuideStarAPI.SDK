@@ -58,7 +58,6 @@ steps:
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
 - task: PublishSymbols@2
-  
   inputs:
     SearchPattern: './Candid.GuideStarAPI/bin/**/*.pdb'
     SymbolServerType: 'TeamServices'
