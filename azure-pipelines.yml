@@ -29,10 +29,10 @@ steps:
     script: |
       $pathToJson = "Candid.GuideStarAPI.Tests/appsettings.test.json"
       $settings = Get-Content $pathToJson | ConvertFrom-Json
-      $settings.Keys.CHARITY_CHECK_KEY = "$Env:CHARITY-CHECK-KEY"
-      $settings.Keys.CHARITY_CHECK_PDF_KEY = "$env:CHARITY-CHECK-PDF-KEY"
-      $settings.Keys.ESSENTIALS_KEY = "$env:ESSENTIALS-KEY"
-      $settings.Keys.PREMIER_KEY = $env:PREMIER-KEY"
+      $settings.Keys.CHARITY_CHECK_KEY = "$(CHARITY_CHECK_KEY)"
+      $settings.Keys.CHARITY_CHECK_PDF_KEY = "$(CHARITY_CHECK_PDF_KEY)"
+      $settings.Keys.ESSENTIALS_KEY = "$(ESSENTIALS_KEY)"
+      $settings.Keys.PREMIER_KEY = "$(PREMIER_KEY)"
       $settings | ConvertTo-Json | set-content $pathToJson
     pwsh: true
 - task: DotNetCoreCLI@2
