@@ -4,14 +4,14 @@
 # https://aka.ms/yaml
 
 trigger:
-- develop
+- master
 
 pool:
   vmImage: windows-latest
 
 variables:
-  Major: '0'
-  Minor: '5'
+  Major: '1'
+  Minor: '0'
   Patch: '0'
 
 steps:
@@ -57,14 +57,11 @@ steps:
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
-- task: PublishSymbols@2
-  inputs:
-    SearchPattern: './Candid.GuideStarAPI/bin/**/*.pdb'
-    SymbolServerType: 'TeamServices'
 - task: DotNetCoreCLI@2
   displayName: 'Push'
   inputs:
     command: 'push'
+    feedsToUse: 'config'
+    includeNugetOrg: 'true'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: '6f219f31-982d-413d-a320-c7741368a80d'
+    
