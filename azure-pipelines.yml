@@ -70,4 +70,11 @@ steps:
     feedsToUse: 'config'
     includeNugetOrg: 'true'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '6f219f31-982d-413d-a320-c7741368a80d'
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'Nuget.org Candid packages'
