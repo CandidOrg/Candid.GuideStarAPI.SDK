@@ -27,9 +27,7 @@ steps:
       $settings.Keys.CHARITY_CHECK_PDF_KEY = "$(CHARITY_CHECK_PDF_KEY)"
       $settings.Keys.ESSENTIALS_KEY = "$(ESSENTIALS_KEY)"
       $settings.Keys.PREMIER_KEY = "$(PREMIER_KEY)"
-      $a | ConvertTo-Json | set-content $pathToJson
-
-      gc $pathToJson
+      $settings | ConvertTo-Json | set-content $pathToJson
     pwsh: true
 - task: DotNetCoreCLI@2
   displayName: 'Restore'
