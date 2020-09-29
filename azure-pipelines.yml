@@ -15,11 +15,6 @@ variables:
   Patch: '9'
 
 steps:
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: 'gci -Recurse'
-    pwsh: true
 #Found a decent tutorial for setting up secrets in devops and github
 #https://samlearnsazure.blog/2020/06/17/using-secrets-safely-in-development-with-net-core/
 - task: PowerShell@2
@@ -28,10 +23,10 @@ steps:
     script: |
       $pathToJson = "Candid.GuideStarAPI.Tests/appsettings.json"
       $settings = Get-Content $pathToJson | ConvertFrom-Json
-      $settings.Keys.CHARITY_CHECK_KEY = $env:CHARITY_CHECK_KEY
-      $settings.Keys.CHARITY_CHECK_PDF_KEY = $env:CHARITY_CHECK_PDF_KEY
-      $settings.Keys.ESSENTIALS_KEY = $env:ESSENTIALS_KEY
-      $settings.Keys.PREMIER_KEY = $env:PREMIER_KEY
+      $settings.Keys.CHARITY_CHECK_KEY = $(CHARITY_CHECK_KEY)
+      $settings.Keys.CHARITY_CHECK_PDF_KEY = $(CHARITY_CHECK_PDF_KEY)
+      $settings.Keys.ESSENTIALS_KEY = $(ESSENTIALS_KEY)
+      $settings.Keys.PREMIER_KEY = $(PREMIER_KEY)
       $a | ConvertTo-Json | set-content $pathToJson
     pwsh: true
 - task: DotNetCoreCLI@2
