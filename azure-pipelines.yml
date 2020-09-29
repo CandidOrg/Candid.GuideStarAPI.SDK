@@ -11,8 +11,8 @@ pool:
 
 variables:
   Major: '0'
-  Minor: '0'
-  Patch: '9'
+  Minor: '5'
+  Patch: '0'
 
 steps:
 #Found a decent tutorial for setting up secrets in devops and github
@@ -21,7 +21,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $pathToJson = "Candid.GuideStarAPI.Tests/appsettings.json"
+      $pathToJson = "Candid.GuideStarAPI.Tests/appsettings.test.json"
       $settings = Get-Content $pathToJson | ConvertFrom-Json
       $settings.Keys[0].CHARITY_CHECK_KEY = "$(CHARITY_CHECK_KEY)"
       $settings.Keys[1].CHARITY_CHECK_PDF_KEY = "$(CHARITY_CHECK_PDF_KEY)"
