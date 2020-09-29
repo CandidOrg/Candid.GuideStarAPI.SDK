@@ -1,6 +1,6 @@
 ﻿namespace Candid.GuideStarApiTest
 {
-  class Keys
+  internal class Keys
   {
     public string CHARITY_CHECK_KEY { get; set; }
     public string CHARITY_CHECK_PDF_KEY { get; set; }

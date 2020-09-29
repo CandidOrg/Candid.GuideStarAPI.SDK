@@ -15,14 +15,14 @@ namespace Candid.GuideStarAPITest
     public void EIN_CorrectFormat_ExpectSuccess()
     {
       var ein = new EIN("12-3456789");
-      Assert.Equal(@"12-3456789", ein.EinString);
+      Assert.Equal("12-3456789", ein.EinString);
     }
 
     [Fact]
     public void EIN_9Digits_ExpectReformat()
     {
       var ein = new EIN("123456789");
-      Assert.Equal(@"12-3456789", ein.EinString);
+      Assert.Equal("12-3456789", ein.EinString);
     }
 
     [Fact]

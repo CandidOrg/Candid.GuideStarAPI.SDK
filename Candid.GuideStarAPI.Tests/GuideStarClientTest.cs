@@ -28,7 +28,7 @@ namespace Candid.GuideStarAPITest
     private static void SetSubscriptionKeys()
     {
       // Only do this once
-      if (!GuideStarClient.SubscriptionKeys.IsEmpty())
+      if(!GuideStarClient.SubscriptionKeys.IsEmpty())
         return;
       if (!string.IsNullOrEmpty(CHARITY_CHECK_KEY))
         GuideStarClient.SubscriptionKeys.Add(Domain.CharityCheckV1, CHARITY_CHECK_KEY);
@@ -36,6 +36,8 @@ namespace Candid.GuideStarAPITest
         GuideStarClient.SubscriptionKeys.Add(Domain.EssentialsV2, ESSENTIALS_KEY);
       if (!string.IsNullOrEmpty(PREMIER_KEY))
         GuideStarClient.SubscriptionKeys.Add(Domain.PremierV3, PREMIER_KEY);
+      if (!string.IsNullOrEmpty(ESSENTIALS_KEY))
+        GuideStarClient.SubscriptionKeys.Add(Domain.Lookup, ESSENTIALS_KEY);
     }
 
     [Fact]
@@ -87,7 +89,7 @@ namespace Candid.GuideStarAPITest
     [Fact]
     public void GuideStarReInitWorks()
     {
-      var premier = PremierResource.GetOrganization("13-1837418");
+      _ = PremierResource.GetOrganization("13-1837418");
       var charitycheck = CharityCheckResource.GetOrganization("13-1837418");
 
       var result = JsonDocument.Parse(charitycheck);
@@ -139,7 +141,7 @@ namespace Candid.GuideStarAPITest
     public void GuideStarClient_BadSubscriptionKey_Expect401()
     {
       GuideStarClient.SubscriptionKeys[Domain.PremierV3] = new SubscriptionKey("01234567890123456789012345678901"); // 32
-      
+
       try
       {
         var premier = PremierResource.GetOrganization("13-1837418");
@@ -154,6 +156,21 @@ namespace Candid.GuideStarAPITest
       {
         Assert.True(false); // Fail - wrong exception type
       }
+    }
+
+    [Fact]
+    public void GuideStarEssentialsLookupWorks()
+    {
+      var lookup = EssentialsResource.GetLookup();
+
+      Assert.NotNull(lookup);
+
+      var result = JsonDocument.Parse(lookup);
+      result.RootElement.TryGetProperty("data", out var data);
+      Assert.True(result.RootElement.TryGetProperty("code", out var code));
+      Assert.True(code.GetInt32() == 200);
+
+      Assert.True(data.GetArrayLength() > 0);
     }
   }
 }

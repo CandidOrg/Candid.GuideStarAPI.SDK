@@ -24,7 +24,8 @@ namespace Candid.GuideStarAPI.Resources
     protected static async Task<string> GetAsync(Request request)
     {
       var client = GuideStarClient.GetRestClient(request.SubscriptionKey);
-      var response = await client.RequestAsync(request);
+      var response = await client.RequestAsync(request)
+        .ConfigureAwait(false);
 
       return response.Content;
     }
@@ -34,6 +35,15 @@ namespace Candid.GuideStarAPI.Resources
       return GuideStarClient.SubscriptionKeys.ContainsKey(domain)
         ? GuideStarClient.SubscriptionKeys[domain]
         : GuideStarClient.GetDefaultSubscriptionKey();
+    }
+
+    protected static Request BuildGetRequest(Domain domain)
+    {
+      return new Request(
+        HttpMethod.Get,
+        GetSubscriptionKey(domain),
+        domain
+      );
     }
 
     protected static Request BuildGetRequest(EIN ein, Domain domain)

@@ -2,10 +2,9 @@
 
 namespace Candid.GuideStarAPI
 {
-  public class GuideStarClient
+  public static class GuideStarClient
   {
     private static SubscriptionKey _defaultSubscriptionKey = null;
-    private static readonly string _baseUrl = @"https://apidata.guidestar.org";
 
     /// <summary>
     /// Initializes GuideStarClient with default subscription key
@@ -17,7 +16,7 @@ namespace Candid.GuideStarAPI
       _defaultSubscriptionKey = new SubscriptionKey(defaultSubscriptionKey);
     }
 
-    public static SubscriptionKeys SubscriptionKeys { get; private set; } = new SubscriptionKeys();
+    public static SubscriptionKeys SubscriptionKeys { get; } = new SubscriptionKeys();
 
     /// <summary>
     /// Get the rest client
@@ -25,7 +24,7 @@ namespace Candid.GuideStarAPI
     /// <returns>The rest client</returns>
     public static RestClient GetRestClient(SubscriptionKey subscriptionKey = null)
     {
-      return new RestClient(subscriptionKey ?? _defaultSubscriptionKey, _baseUrl);
+      return new RestClient(subscriptionKey ?? _defaultSubscriptionKey);
     }
 
     public static SubscriptionKey GetDefaultSubscriptionKey()

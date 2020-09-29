@@ -48,7 +48,7 @@ namespace Candid.GuideStarAPI.Types
 
     public override bool Equals(object obj)
     {
-      if (obj == null || !obj.GetType().Equals(GetType()))
+      if (obj?.GetType().Equals(GetType()) != true)
       {
         return false;
       }
@@ -69,7 +69,7 @@ namespace Candid.GuideStarAPI.Types
         return true;
       }
 
-      if (((object)a == null) || ((object)b == null))
+      if (a is null || b is null)
       {
         return false;
       }

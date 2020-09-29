@@ -7,19 +7,16 @@ namespace Candid.GuideStarAPI.Resources
     public static string GetOrganization(string ein)
     {
       var EIN = new EIN(ein);
-      
-      var response = Get(BuildGetRequest(EIN, Domain.CharityCheckV1));
 
-      return response;
+      return Get(BuildGetRequest(EIN, Domain.CharityCheckV1));
     }
 
     public static async Task<string> GetOrganizationAsync(string ein)
     {
       var EIN = new EIN(ein);
 
-      var response = await GetAsync(BuildGetRequest(EIN, Domain.CharityCheckV1));
-
-      return response;
+      return await GetAsync(BuildGetRequest(EIN, Domain.CharityCheckV1))
+        .ConfigureAwait(false);
     }
   }
 }

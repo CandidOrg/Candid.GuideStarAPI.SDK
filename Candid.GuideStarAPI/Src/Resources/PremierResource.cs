@@ -8,18 +8,15 @@ namespace Candid.GuideStarAPI.Resources
     {
       var EIN = new EIN(ein);
 
-      var response = Get(BuildGetRequest(EIN, Domain.PremierV3));
-
-      return response;
+      return Get(BuildGetRequest(EIN, Domain.PremierV3));
     }
 
     public static async Task<string> GetOrganizationAsync(string ein)
     {
       var EIN = new EIN(ein);
 
-      var response = await GetAsync(BuildGetRequest(EIN, Domain.PremierV3));
-
-      return response;
+      return await GetAsync(BuildGetRequest(EIN, Domain.PremierV3))
+        .ConfigureAwait(false);
     }
   }
 }

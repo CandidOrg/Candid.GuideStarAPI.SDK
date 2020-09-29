@@ -17,12 +17,10 @@ namespace Candid.GuideStarAPI
     public HttpClient HttpClient { get; }
 
     private readonly SubscriptionKey _subscriptionKey;
-    private readonly string _baseUrl;
 
-    public RestClient(SubscriptionKey subscriptionKey, string baseURL)
+    public RestClient(SubscriptionKey subscriptionKey)
     {
       _subscriptionKey = subscriptionKey;
-      _baseUrl = baseURL;
       HttpClient = DefaultClient();
     }
 
@@ -94,7 +92,9 @@ namespace Candid.GuideStarAPI
         }
       }
       else
+      {
         throw new ApiException(httpResponse);
+      }
     }
 
     private HttpRequestMessage BuildHttpRequest(Request request)
@@ -108,7 +108,7 @@ namespace Candid.GuideStarAPI
       httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
       httpRequest.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("utf-8"));
 
-      var libraryVersion = "candid-csharp";
+      const string libraryVersion = "candid-csharp";
       httpRequest.Headers.TryAddWithoutValidation("User-Agent", libraryVersion);
 
       return httpRequest;
