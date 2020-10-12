@@ -67,7 +67,7 @@ steps:
   displayName: 'Sign Package'
   inputs:
     command: 'custom'
-    arguments: 'sign Candid.GuideStarAPI.nupkg -CertificatePath $(GuideStarNugetCert)'
+    arguments: 'sign *.nupkg -CertificatePath $(GuideStarNugetCert)'
 - task: PublishSymbols@2
   displayName: 'Publis Symbols'
   inputs:
