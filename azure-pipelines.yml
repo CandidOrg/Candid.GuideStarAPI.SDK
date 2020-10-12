@@ -64,17 +64,11 @@ steps:
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: 'gci -Recurse'
-    failOnStderr: true
-    pwsh: true
 - task: NuGetCommand@2
   displayName: 'Sign Package'
   inputs:
     command: 'custom'
-    arguments: 'sign $(Build.ArtifactStagingDirectory)/**/*.nupkg -CertificatePath $(GuideStarNugetCert)'
+    arguments: 'sign $(Build.ArtifactStagingDirectory)/*.nupkg -CertificatePath $(GuideStarNugetCert) -Timestamper http:/timestamp.digicert.com'
 - task: PublishSymbols@2
   displayName: 'Publis Symbols'
   inputs:
