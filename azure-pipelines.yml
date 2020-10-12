@@ -15,6 +15,12 @@ variables:
   Patch: '0'
 
 steps:
+- task: AzureKeyVault@1
+  inputs:
+    azureSubscription: 'AzureResources'
+    KeyVaultName: 'devop-api-key-vault'
+    SecretsFilter: '*'
+    RunAsPreJob: false
 #Found a decent tutorial for setting up secrets in devops and github
 #https://samlearnsazure.blog/2020/06/17/using-secrets-safely-in-development-with-net-core/
 - task: PowerShell@2
@@ -23,10 +29,10 @@ steps:
     script: |
       $pathToJson = "Candid.GuideStarAPI.Tests/appsettings.test.json"
       $settings = Get-Content $pathToJson | ConvertFrom-Json
-      $settings.Keys.CHARITY_CHECK_KEY = "$(CHARITY_CHECK_KEY)"
-      $settings.Keys.CHARITY_CHECK_PDF_KEY = "$(CHARITY_CHECK_PDF_KEY)"
-      $settings.Keys.ESSENTIALS_KEY = "$(ESSENTIALS_KEY)"
-      $settings.Keys.PREMIER_KEY = "$(PREMIER_KEY)"
+      $settings.Keys.CHARITY_CHECK_KEY = "$(CHARITY-CHECK-KEY)"
+      $settings.Keys.CHARITY_CHECK_PDF_KEY = "$(CHARITY-CHECK-PDF-KEY)"
+      $settings.Keys.ESSENTIALS_KEY = "$(ESSENTIALS-KEY)"
+      $settings.Keys.PREMIER_KEY = "$(PREMIER-KEY)"
       $settings | ConvertTo-Json | set-content $pathToJson
     pwsh: true
 - task: DotNetCoreCLI@2
@@ -57,7 +63,13 @@ steps:
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
+- task: NuGetCommand@2
+  displayName: 'Sign Package'
+  inputs:
+    command: 'custom'
+    arguments: 'nuget sign Candid.GuideStarAPI.nupkg -CertificatePath $(GuideStarNugetCert)'
 - task: PublishSymbols@2
+  displayName: 'Publis Symbols'
   inputs:
     SearchPattern: './Candid.GuideStarAPI/bin/**/*.pdb'
     SymbolServerType: 'TeamServices'
@@ -69,6 +81,7 @@ steps:
     nuGetFeedType: 'internal'
     publishVstsFeed: '6f219f31-982d-413d-a320-c7741368a80d'
 - task: NuGetCommand@2
+  displayName: 'push to nuget.org'
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
