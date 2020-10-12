@@ -9,11 +9,6 @@ trigger:
 pool:
   vmImage: windows-latest
 
-variables:
-  Major: '1'
-  Minor: '0'
-  Patch: '0'
-
 steps:
 - task: AzureKeyVault@1
   inputs:
@@ -62,9 +57,6 @@ steps:
     nobuild: true
     packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
     versioningScheme: byBuildNumber
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
 - task: NuGetCommand@2
   displayName: 'Sign Package'
   inputs:
