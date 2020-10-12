@@ -27,6 +27,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      Get-Variable
       $pathToJson = "Candid.GuideStarAPI.Tests/appsettings.test.json"
       $settings = Get-Content $pathToJson | ConvertFrom-Json
       $settings.Keys.CHARITY_CHECK_KEY = "$(CHARITY_CHECK_KEY)"
