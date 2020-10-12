@@ -58,16 +58,23 @@ steps:
   displayName: 'Pack'
   inputs:
     command: pack
+    nobuild: true
     packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
     versioningScheme: byPrereleaseNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'gci -Recurse'
+    failOnStderr: true
+    pwsh: true
 - task: NuGetCommand@2
   displayName: 'Sign Package'
   inputs:
     command: 'custom'
-    arguments: 'sign **/*.nupkg -CertificatePath $(GuideStarNugetCert)'
+    arguments: 'sign $(Build.ArtifactStagingDirectory)/**/*.nupkg -CertificatePath $(GuideStarNugetCert)'
 - task: PublishSymbols@2
   displayName: 'Publis Symbols'
   inputs:
@@ -82,3 +89,9 @@ steps:
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '6f219f31-982d-413d-a320-c7741368a80d'
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'Candid Nuget'
