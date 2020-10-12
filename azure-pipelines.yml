@@ -27,10 +27,10 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      Write-Host $env
+      Write-Host ${env}
       $pathToJson = "Candid.GuideStarAPI.Tests/appsettings.test.json"
       $settings = Get-Content $pathToJson | ConvertFrom-Json
-      $settings.Keys.CHARITY_CHECK_KEY = "$env:CHARITY_CHECK_KEY"
+      $settings.Keys.CHARITY_CHECK_KEY = "${env:CHARITY_CHECK_KEY}"
       $settings.Keys.CHARITY_CHECK_PDF_KEY = "$env:CHARITY_CHECK_PDF_KEY"
       $settings.Keys.ESSENTIALS_KEY = "$env:ESSENTIALS_KEY"
       $settings.Keys.PREMIER_KEY = $env:PREMIER_KEY"
