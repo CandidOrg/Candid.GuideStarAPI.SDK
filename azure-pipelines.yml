@@ -15,12 +15,13 @@ variables:
   Patch: '0'
 
 steps:
+
 - task: AzureKeyVault@1
   inputs:
     azureSubscription: 'AzureResources'
     KeyVaultName: 'devop-api-key-vault'
     SecretsFilter: '*'
-    RunAsPreJob: false
+    RunAsPreJob: true
 #Found a decent tutorial for setting up secrets in devops and github
 #https://samlearnsazure.blog/2020/06/17/using-secrets-safely-in-development-with-net-core/
 - task: PowerShell@2
