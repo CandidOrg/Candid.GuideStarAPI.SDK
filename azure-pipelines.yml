@@ -73,6 +73,7 @@ steps:
       $package = gci -Path $(Build.ArtifactStagingDirectory) -Filter *.nupkg
       write-host $package.FullName
       Write-Host $(GuideStarNugetCert)
+      Write-Host $(SIGNING-CERT-PASSWORD)
       
     failOnStderr: true
     pwsh: true
