@@ -9,6 +9,11 @@ trigger:
 pool:
   vmImage: windows-latest
 
+variables:
+  Major: '1'
+  Minor: '0'
+  Patch: '0'
+
 steps:
 - task: AzureKeyVault@1
   inputs:
@@ -56,14 +61,22 @@ steps:
     command: pack
     nobuild: true
     packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
-    versioningScheme: byBuildNumber
-- task: NuGetCommand@2
-  displayName: 'Sign Package'
+    versioningScheme: byPrereleaseNumber
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
+- task: PowerShell@2
   inputs:
-    command: 'custom'
-    arguments: 'sign *.nupkg -CertificatePath $(GuideStarNugetCert) -Timestamper http:/timestamp.digicert.com'
+    targetType: 'inline'
+    script: |
+      pwd
+      $package = gci -Recurse -Filter *.nupkg
+      
+      nuget sign ($package.FullName) -CertificatePath $(GuideStarNugetCert) -Timestamper http:/timestamp.digicert.com'
+    failOnStderr: true
+    pwsh: true
 - task: PublishSymbols@2
-  displayName: 'Publis Symbols'
+  displayName: 'Publish Symbols'
   inputs:
     SearchPattern: './Candid.GuideStarAPI/bin/**/*.pdb'
     SymbolServerType: 'TeamServices'
