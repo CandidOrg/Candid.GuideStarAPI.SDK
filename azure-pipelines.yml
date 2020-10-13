@@ -71,7 +71,7 @@ steps:
     targetType: 'inline'
     script: |
       $package = gci -Path $(Build.ArtifactStagingDirectory) -Filter *.nupkg
-      write-host $(GuideStarNugetCert.id)
+      write-host $(GuideStarNugetCert).id
       
     failOnStderr: true
     pwsh: true
