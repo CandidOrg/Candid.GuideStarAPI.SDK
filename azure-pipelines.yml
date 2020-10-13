@@ -71,10 +71,7 @@ steps:
     targetType: 'inline'
     script: |
       $package = gci -Path $(Build.ArtifactStagingDirectory) -Filter *.nupkg
-      write-host $package.FullName
-      Write-Host $(GuideStarNugetCert)
-      Write-Host $(SIGNING-CERT-PASSWORD)
-      
+      nuget sign $package.FullName -CertificatePath $(GuideStarNugetCert) -CertificatePassword $(SIGNING-CERT-PASSWORD) -Timestamper http://timestamp.digicert.com'
     failOnStderr: true
     pwsh: true
 - task: PublishSymbols@2
