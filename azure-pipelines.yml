@@ -67,6 +67,7 @@ steps:
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
 - task: PowerShell@2
+#found basic explanation here: https://github.com/microsoft/azure-pipelines-tasks/issues/13553
   displayName: 'Signing package'
   inputs:
     targetType: 'inline'
