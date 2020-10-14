@@ -78,7 +78,7 @@ steps:
       $protectedCertificateBytes = $certCollection.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Pkcs12, "$(SIGNING-CERT-PASSWORD)")
       $pfxPath = "temp.pfx"
       [System.IO.File]::WriteAllBytes($pfxPath, $protectedCertificateBytes)
-      nuget sign $package.FullName -CertificatePath $pfxPath -CertificatePassword "$(SIGNING-CERT-PASSWORD)"" -Timestamper http://timestamp.digicert.com'
+      nuget sign $package.FullName -CertificatePath $pfxPath -CertificatePassword "$(SIGNING-CERT-PASSWORD)" -Timestamper "http://timestamp.digicert.com"'
     failOnStderr: true
     pwsh: true
 - task: PublishSymbols@2
