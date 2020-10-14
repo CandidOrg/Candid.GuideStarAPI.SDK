@@ -5,21 +5,27 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Company>Candid</Company>
-    <Authors>
-      Candid programmers
-    </Authors>
+    <Authors>Candid programmers</Authors>
     <Description>SDK to simplify using GuideStar APIs</Description>
-    <Copyright>Candid</Copyright>
     <PackageProjectUrl>https://github.com/CandidOrg/APILibrary</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/CandidOrg/APILibrary</RepositoryUrl>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/CandidOrg/Candid.GuideStarAPI.SDK/tree/develop</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Candid</Copyright>
+    <PackageLicenseExpression></PackageLicenseExpression>
     <UserSecretsId>bff8309b-bfaa-475c-8443-78a5ce4f88f9</UserSecretsId>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="XUnitTestProject1\**" />
     <EmbeddedResource Remove="XUnitTestProject1\**" />
     <None Remove="XUnitTestProject1\**" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
