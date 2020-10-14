@@ -76,6 +76,7 @@ steps:
       $certCollection.Import($kvSecretBytes, $null, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
       $protectedCertificateBytes = $certCollection.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Pkcs12, "$(SIGNING-CERT-PASSWORD)")
       $pfxPath = "temp.pfx"
+      [System.IO.File]::WriteAllBytes($pfxPath, $protectedCertificateBytes)
       
     failOnStderr: true
     pwsh: true
