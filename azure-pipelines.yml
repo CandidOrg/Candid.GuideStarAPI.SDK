@@ -74,7 +74,7 @@ steps:
       $kvSecretBytes = [System.Convert]::FromBase64String("$(GuideStarNugetCert)")
       $certCollection = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2Collection
       $certCollection.Import($kvSecretBytes, $null, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
-      $protectedCertificateBytes = $certCollection.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Pkcs12, $(SIGNING-CERT-PASSWORD))
+      $protectedCertificateBytes = $certCollection.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Pkcs12, "$(SIGNING-CERT-PASSWORD)")
       $pfxPath = "temp.pfx"
       [System.IO.File]::WriteAllBytes($pfxPath, $protectedCertificateBytes)
       nuget sign $package.FullName -CertificatePath $pfxPath -CertificatePassword $(SIGNING-CERT-PASSWORD) -Timestamper http://timestamp.digicert.com'
