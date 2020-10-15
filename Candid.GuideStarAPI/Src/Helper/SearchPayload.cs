@@ -24,7 +24,7 @@ namespace Candid.GuideStarAPI
 
   public class Sort
   {
-    public string sort_by { get; set; }
+    public SortOptions sort_by { get; set; }
     public bool? ascending { get; set; }
   }
 

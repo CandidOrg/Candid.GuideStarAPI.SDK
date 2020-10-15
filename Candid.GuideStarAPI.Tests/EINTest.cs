@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Text.Json;
-using Candid.GuideStarAPI;
-using Candid.GuideStarAPI.Resources;
-using Candid.GuideStarApiTest;
-using Microsoft.Extensions.Configuration;
 using Xunit;
-using Xunit.Sdk;
 
-namespace Candid.GuideStarAPITest
+namespace Candid.GuideStarAPI.Tests
 {
   public class EINTest
   {
