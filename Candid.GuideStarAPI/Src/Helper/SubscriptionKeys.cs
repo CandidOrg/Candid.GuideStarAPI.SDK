@@ -9,12 +9,26 @@ namespace Candid.GuideStarAPI
     {
     }
 
+    /// <summary>
+    /// Add a subscription key for a given domain.
+    /// Implements upsert behavior, that is it will add a value if it doesn't exist and update
+    /// an existing value.
+    /// Null valued domain and keys will cause an ArgumentNullException
+    /// </summary>
+    /// <param name="domain">Domain that a value should be associated with</param>
+    /// <param name="key">API key for domain value</param>
     public new void Add(Domain domain, SubscriptionKey key)
     {
-      if (ContainsKey(domain))
-        throw new Exception($"Subscription list already contains value for domain '${domain.ToString()}'");
-      else
-        base.Add(domain, key);
+      if (domain is null)
+      {
+        throw new ArgumentNullException(nameof(domain));
+      }
+      if (key is null)
+      {
+        throw new ArgumentNullException(nameof(key));
+      }
+
+      base[domain] = key;
     }
 
     public void Add(Domain domain, string primary, string secondary = null)
@@ -44,7 +58,7 @@ namespace Candid.GuideStarAPI
       Secondary = secondaryKey;
     }
 
-    public string Primary { get; private set; }
-    public string Secondary { get; private set; }
+    public string Primary { get; }
+    public string Secondary { get; }
   }
 }

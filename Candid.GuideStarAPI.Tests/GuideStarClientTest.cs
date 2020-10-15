@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Text.Json;
-using Candid.GuideStarAPI;
 using Candid.GuideStarAPI.Resources;
 using Candid.GuideStarApiTest;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace Candid.GuideStarAPITest
+namespace Candid.GuideStarAPI.Tests
 {
   public class GuideStarClientTest
   {
@@ -15,6 +14,9 @@ namespace Candid.GuideStarAPITest
     private static string ESSENTIALS_KEY;
     private static string PREMIER_KEY;
 
+    /// <summary>
+    /// This happens before every test
+    /// </summary>
     public GuideStarClientTest()
     {
       _config = ConfigLoader.InitConfiguration();
@@ -27,9 +29,6 @@ namespace Candid.GuideStarAPITest
 
     private static void SetSubscriptionKeys()
     {
-      // Only do this once
-      if(!GuideStarClient.SubscriptionKeys.IsEmpty())
-        return;
       if (!string.IsNullOrEmpty(CHARITY_CHECK_KEY))
         GuideStarClient.SubscriptionKeys.Add(Domain.CharityCheckV1, CHARITY_CHECK_KEY);
       if (!string.IsNullOrEmpty(ESSENTIALS_KEY))
