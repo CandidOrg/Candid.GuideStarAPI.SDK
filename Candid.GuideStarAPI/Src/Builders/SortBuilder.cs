@@ -1,4 +1,6 @@
-﻿using Candid.GuideStarAPI.Types;
+﻿using System.Text.Json.Serialization;
+using Candid.GuideStarAPI.Src.Helper;
+using Candid.GuideStarAPI.Types;
 
 namespace Candid.GuideStarAPI
 {
@@ -34,6 +36,7 @@ namespace Candid.GuideStarAPI
     public Sort Build() => _sort;
   }
 
+  [JsonConverter(typeof(StringEnumConverter<SortOptions>))]
   public class SortOptions : StringEnum
   {
     private SortOptions(string value) : base(value) { }
@@ -43,10 +46,10 @@ namespace Candid.GuideStarAPI
       return new SortOptions(value);
     }
 
-    //relecance is null since empty string is not a valid JSON value
+    //relevance is null since empty string is not a valid JSON value
     //from: https://github.com/dotnet/runtime/issues/34310
     public static readonly SortOptions Relevance;
-    public static readonly SortOptions OrganizationName = "Organization_name";
+    public static readonly SortOptions OrganizationName = "organization_name";
     public static readonly SortOptions BmfGrossReceipts = "bmf_gross_receipts";
     public static readonly SortOptions BmfAssets = "bmf_assets";
   }

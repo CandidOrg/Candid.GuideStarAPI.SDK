@@ -9,7 +9,7 @@ namespace Candid.GuideStarAPI.Tests
 {
   public class GuideStarClientTest
   {
-    private readonly IConfiguration _config;
+    private static readonly IConfiguration _config = ConfigLoader.InitConfiguration();
     private static string CHARITY_CHECK_KEY;
     private static string ESSENTIALS_KEY;
     private static string PREMIER_KEY;
@@ -19,7 +19,6 @@ namespace Candid.GuideStarAPI.Tests
     /// </summary>
     public GuideStarClientTest()
     {
-      _config = ConfigLoader.InitConfiguration();
       CHARITY_CHECK_KEY = _config["Keys:CHARITY_CHECK_KEY"];
       ESSENTIALS_KEY = _config["Keys:ESSENTIALS_KEY"];
       PREMIER_KEY = _config["Keys:PREMIER_KEY"];
