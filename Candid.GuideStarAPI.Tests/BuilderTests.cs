@@ -20,9 +20,6 @@ namespace Candid.GuideStarAPI.Tests
 
     private static void SetSubscriptionKeys()
     {
-      // Only do this once
-      if (!GuideStarClient.SubscriptionKeys.IsEmpty())
-        return;
       if (!string.IsNullOrEmpty(ESSENTIALS_KEY))
         GuideStarClient.SubscriptionKeys.Add(Domain.EssentialsV2, ESSENTIALS_KEY);
     }
@@ -31,7 +28,7 @@ namespace Candid.GuideStarAPI.Tests
     /// This test ensures that Audits can be passed in and valid results return from the API.
     /// </summary>
     [Fact]
-    public void GuideStarAuditBuilderWorks()
+    public void AuditBuilder()
     {
       // return guidestar as search result.  expecting 200 result
       var payload = SearchPayloadBuilder.Create()
@@ -52,7 +49,7 @@ namespace Candid.GuideStarAPI.Tests
     }
 
     [Fact]
-    public void GuideStarSortbyRelevenceAscendingWorks()
+    public void SortbyRelevenceAscending()
     {
       var payload = SearchPayloadBuilder.Create()
         .WithSearchTerms("test")
@@ -71,7 +68,7 @@ namespace Candid.GuideStarAPI.Tests
     }
 
     [Fact]
-    public void GuideStarSortbyRelevenceDescendingWorks()
+    public void SortbyRelevenceDescending()
     {
       var payload = SearchPayloadBuilder.Create()
         .WithSearchTerms("test")
@@ -88,6 +85,124 @@ namespace Candid.GuideStarAPI.Tests
 
       Assert.NotNull(essentials);
     }
+
+    [Fact]
+    public void SortbyOrganizationNameAscending()
+    {
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .Sort(sortBuilder =>
+          sortBuilder.SortBy(SortOptions.OrganizationName)
+          .SortByAscending()
+        )
+        .Build();
+      var essentials = EssentialsResource.GetOrganization(payload);
+      var result = JsonDocument.Parse(essentials);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
+      Assert.NotNull(essentials);
+    }
+
+    [Fact]
+    public void SortbyOrganizationNameDescending()
+    {
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .Sort(sortBuilder =>
+          sortBuilder.SortBy(SortOptions.OrganizationName)
+          .SortByDescending()
+        )
+        .Build();
+      var essentials = EssentialsResource.GetOrganization(payload);
+      var result = JsonDocument.Parse(essentials);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
+      Assert.NotNull(essentials);
+    }
+
+    [Fact]
+    public void SortbyBmfAssetsAscending()
+    {
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .Sort(sortBuilder =>
+          sortBuilder.SortBy(SortOptions.BmfAssets)
+          .SortByAscending()
+        )
+        .Build();
+      var essentials = EssentialsResource.GetOrganization(payload);
+      var result = JsonDocument.Parse(essentials);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
+      Assert.NotNull(essentials);
+    }
+
+    [Fact]
+    public void SortbyBmfAssetsDescending()
+    {
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .Sort(sortBuilder =>
+          sortBuilder.SortBy(SortOptions.BmfAssets)
+          .SortByDescending()
+        )
+        .Build();
+      var essentials = EssentialsResource.GetOrganization(payload);
+      var result = JsonDocument.Parse(essentials);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
+      Assert.NotNull(essentials);
+    }
+
+    [Fact]
+    public void SortbyBmfGrossReceiptsAscending()
+    {
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .Sort(sortBuilder =>
+          sortBuilder.SortBy(SortOptions.BmfGrossReceipts)
+          .SortByAscending()
+        )
+        .Build();
+      var essentials = EssentialsResource.GetOrganization(payload);
+      var result = JsonDocument.Parse(essentials);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
+      Assert.NotNull(essentials);
+    }
+
+    [Fact]
+    public void SortbyBmfGrossReceiptsDescending()
+    {
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .Sort(sortBuilder =>
+          sortBuilder.SortBy(SortOptions.BmfGrossReceipts)
+          .SortByDescending()
+        )
+        .Build();
+      var essentials = EssentialsResource.GetOrganization(payload);
+      var result = JsonDocument.Parse(essentials);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
+      Assert.NotNull(essentials);
+    }
+
+    //Candid.GuideStarAPI.Geography
+    [Fact]
+    public void 
   }
 
   //Candid.GuideStarAPI.Response
@@ -98,7 +213,6 @@ namespace Candid.GuideStarAPI.Tests
   //Candid.GuideStarAPI.Financials
   //Candid.GuideStarAPI.Form_Types
   //Candid.GuideStarAPI.Min_Max
-  //Candid.GuideStarAPI.Sort
   //Candid.GuideStarAPI.Specific_Exclusions
   //Candid.GuideStarAPI.ApiConnectionException
   //Candid.GuideStarAPI.Audits
