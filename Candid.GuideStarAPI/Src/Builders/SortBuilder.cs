@@ -39,7 +39,7 @@ namespace Candid.GuideStarAPI
   [JsonConverter(typeof(StringEnumConverter<SortOptions>))]
   public class SortOptions : StringEnum
   {
-    private SortOptions(string value) : base(value) { }
+    public SortOptions(string value) : base(value) { }
 
     public static implicit operator SortOptions(string value)
     {
@@ -48,7 +48,7 @@ namespace Candid.GuideStarAPI
 
     //relevance is null since empty string is not a valid JSON value
     //from: https://github.com/dotnet/runtime/issues/34310
-    public static readonly SortOptions Relevance;
+    public static readonly SortOptions Relevance = null;
     public static readonly SortOptions OrganizationName = "organization_name";
     public static readonly SortOptions BmfGrossReceipts = "bmf_gross_receipts";
     public static readonly SortOptions BmfAssets = "bmf_assets";
