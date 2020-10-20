@@ -14,7 +14,7 @@ namespace Candid.GuideStarAPI
 
     public GeographyBuilder HavingState(IEnumerable<string> states)
     {
-      _geography.state = states.ToArray();
+      _geography.state = states?.ToArray();
       return this;
     }
     public GeographyBuilder HavingZipCode(string zipCode)
@@ -29,29 +29,29 @@ namespace Candid.GuideStarAPI
 
     public GeographyBuilder WithinZipRadius(int zipRadius)
     {
-      if (zipRadius >= 0)
+      if (zipRadius >= 0 && zipRadius <= 50)
       {
         _geography.radius = zipRadius;
         return this;
       }
-      throw new ArgumentOutOfRangeException("Zip Radius must be greater than 0");
+      throw new ArgumentOutOfRangeException("Zip Radius must be between 0 and 50, inclusive");
     }
 
     public GeographyBuilder HavingMSA(IEnumerable<string> msa)
     {
-      _geography.msa = msa.ToArray();
+      _geography.msa = msa?.ToArray();
       return this;
     }
 
     public GeographyBuilder HavingCity(IEnumerable<string> cities)
     {
-      _geography.city = cities.ToArray();
+      _geography.city = cities?.ToArray();
       return this;
     }
 
     public GeographyBuilder HavingCounty(IEnumerable<string> counties)
     {
-      _geography.county = counties.ToArray();
+      _geography.county = counties?.ToArray();
       return this;
     }
 

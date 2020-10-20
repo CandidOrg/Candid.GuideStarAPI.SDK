@@ -1,8 +1,14 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Linq;
+
 using Candid.GuideStarAPI.Resources;
 using Candid.GuideStarApiTest;
 using Microsoft.Extensions.Configuration;
 using Xunit;
+
+
 namespace Candid.GuideStarAPI.Tests
 {
   public class BuilderTests
@@ -35,7 +41,7 @@ namespace Candid.GuideStarAPI.Tests
         .Filters(
           filterBuilder => filterBuilder
           .Organization(
-              organizationBuilder => 
+              organizationBuilder =>
                 organizationBuilder.Audits(auditBuilder => auditBuilder.HavingA133Audit())
           )
       ).Build();
@@ -48,33 +54,33 @@ namespace Candid.GuideStarAPI.Tests
       Assert.NotNull(essentials);
     }
 
-    [Fact]
-    public void SortbyRelevenceAscending()
-    {
-      var payload = SearchPayloadBuilder.Create()
-        .WithSearchTerms("test")
-        .Sort(sortBuilder => 
-          sortBuilder.SortBy(SortOptions.Relevance)
-          .SortByAscending()
-        )
-        .Build();
-      var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonDocument.Parse(essentials);
-      result.RootElement.TryGetProperty("code", out var response);
-      Assert.True(response.TryGetInt32(out int code));
-      Assert.True(code == 200);
+    public static IEnumerable<object[]> SortPatameters =>
+      new List<object[]>
+      {
+        new object[] { SortOptions.Relevance, true},
+        new object[] { SortOptions.Relevance, false},
+        new object[] { SortOptions.OrganizationName, true},
+        new object[] { SortOptions.OrganizationName, false},
+        new object[] { SortOptions.BmfGrossReceipts, true},
+        new object[] { SortOptions.BmfGrossReceipts, false},
+        new object[] { SortOptions.BmfAssets, true},
+        new object[] { SortOptions.BmfAssets, false}
+      };
 
-      Assert.NotNull(essentials);
-    }
-
-    [Fact]
-    public void SortbyRelevenceDescending()
+    [Theory]
+    [MemberData(nameof(SortPatameters))]
+    public void SortBuilderTheory(SortOptions sort, bool sortAscending)
     {
       var payload = SearchPayloadBuilder.Create()
         .WithSearchTerms("test")
         .Sort(sortBuilder =>
-          sortBuilder.SortBy(SortOptions.Relevance)
-          .SortByDescending()
+        {
+          sortBuilder.SortBy(sort);
+          if (sortAscending)
+            sortBuilder.SortByDescending();
+          else
+            sortBuilder.SortByDescending();
+        }
         )
         .Build();
       var essentials = EssentialsResource.GetOrganization(payload);
@@ -86,14 +92,26 @@ namespace Candid.GuideStarAPI.Tests
       Assert.NotNull(essentials);
     }
 
-    [Fact]
-    public void SortbyOrganizationNameAscending()
+
+    public static IEnumerable<object[]> goodStatesData =>
+      new List<object[]>
+      {
+        new object[] { new List<string>() { "AK" } },
+        new object[] { new List<string>() { "AK", "CA" } },
+        new object[] { new List<string>() { "GU", "VI", "PU" } },
+        new object[] { new List<string>() { "" } },
+        new object[] { new List<string>() { null } },
+        new object[] { null }
+      };
+
+    [Theory]
+    [MemberData(nameof(goodStatesData))]
+    public void GeographyHavingState(IEnumerable<string> states)
     {
       var payload = SearchPayloadBuilder.Create()
         .WithSearchTerms("test")
-        .Sort(sortBuilder =>
-          sortBuilder.SortBy(SortOptions.OrganizationName)
-          .SortByAscending()
+        .Filters(filterBuilder =>
+          filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingState(states))
         )
         .Build();
       var essentials = EssentialsResource.GetOrganization(payload);
@@ -105,35 +123,46 @@ namespace Candid.GuideStarAPI.Tests
       Assert.NotNull(essentials);
     }
 
-    [Fact]
-    public void SortbyOrganizationNameDescending()
+    public static IEnumerable<object[]> badStatesData =>
+      new List<object[]>
+      {
+        new object[] { new List<string>() { "ZU" } },
+        new object[] { new List<string>() { "KH", "LP" } },
+        new object[] { new List<string>() { "AQ", "DF", "QA" } }
+      };
+
+
+    [Theory]
+    [MemberData(nameof(badStatesData))]
+    public void GeographyHavingStateFails(IEnumerable<string> states)
     {
       var payload = SearchPayloadBuilder.Create()
         .WithSearchTerms("test")
-        .Sort(sortBuilder =>
-          sortBuilder.SortBy(SortOptions.OrganizationName)
-          .SortByDescending()
+        .Filters(filterBuilder =>
+          filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingState(states))
         )
         .Build();
-      var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonDocument.Parse(essentials);
-      result.RootElement.TryGetProperty("code", out var response);
-      Assert.True(response.TryGetInt32(out int code));
-      Assert.True(code == 200);
-
-      Assert.NotNull(essentials);
+      Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
     }
 
-    [Fact]
-    public void SortbyBmfAssetsAscending()
+    public static IEnumerable<object[]> goodZipcodeData =>
+      new List<object[]>
+      {
+        new object[] { "90210" },
+        new object[] { "10001" },
+        new object[] { "80014" }
+      };
+
+    [Theory]
+    [MemberData(nameof(goodZipcodeData))]
+    public void GeographyZipCode(string zipcode)
     {
       var payload = SearchPayloadBuilder.Create()
-        .WithSearchTerms("test")
-        .Sort(sortBuilder =>
-          sortBuilder.SortBy(SortOptions.BmfAssets)
-          .SortByAscending()
-        )
-        .Build();
+       .WithSearchTerms("test")
+       .Filters(filterBuilder =>
+         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingZipCode(zipcode))
+       )
+       .Build();
       var essentials = EssentialsResource.GetOrganization(payload);
       var result = JsonDocument.Parse(essentials);
       result.RootElement.TryGetProperty("code", out var response);
@@ -143,16 +172,45 @@ namespace Candid.GuideStarAPI.Tests
       Assert.NotNull(essentials);
     }
 
-    [Fact]
-    public void SortbyBmfAssetsDescending()
+    public static IEnumerable<object[]> badZipcodeData =>
+      new List<object[]>
+      {
+        new object[] { "902101" },
+        new object[] { "9021" },
+        new object[] { "" },
+        new object[] { null }
+      };
+
+    [Theory]
+    [MemberData(nameof(badZipcodeData))]
+    public void GeographyZipCodeFails(string zipcode)
+    {
+      Assert.Throws<ArgumentOutOfRangeException>(() => SearchPayloadBuilder.Create()
+       .WithSearchTerms("test")
+       .Filters(filterBuilder =>
+         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingZipCode(zipcode))
+       )
+       .Build());
+    }
+
+    public static IEnumerable<object[]> goodZipRadius =>
+      new List<object[]>
+      {
+        new object[] { 0 },
+        new object[] { 10 },
+        new object[] { 50 }
+      };
+
+    [Theory]
+    [MemberData(nameof(goodZipRadius))]
+    public void GeographyWithinZipRadius(int zipRadius)
     {
       var payload = SearchPayloadBuilder.Create()
-        .WithSearchTerms("test")
-        .Sort(sortBuilder =>
-          sortBuilder.SortBy(SortOptions.BmfAssets)
-          .SortByDescending()
-        )
-        .Build();
+       .WithSearchTerms("test")
+       .Filters(filterBuilder =>
+         filterBuilder.Geography(geographyBuilder => geographyBuilder.WithinZipRadius(zipRadius))
+       )
+       .Build();
       var essentials = EssentialsResource.GetOrganization(payload);
       var result = JsonDocument.Parse(essentials);
       result.RootElement.TryGetProperty("code", out var response);
@@ -162,16 +220,41 @@ namespace Candid.GuideStarAPI.Tests
       Assert.NotNull(essentials);
     }
 
-    [Fact]
-    public void SortbyBmfGrossReceiptsAscending()
+    public static IEnumerable<object[]> badZipRadius =>
+     new List<object[]>
+     {
+        new object[] { -1 },
+        new object[] { 51}
+     };
+
+    [Theory]
+    [MemberData(nameof(badZipRadius))]
+    public void GeographyWithinZipRadiusFails(int zipRadius)
+    {
+      Assert.Throws<ArgumentOutOfRangeException>(() => SearchPayloadBuilder.Create()
+       .WithSearchTerms("test")
+       .Filters(filterBuilder =>
+         filterBuilder.Geography(geographyBuilder => geographyBuilder.WithinZipRadius(zipRadius))
+       )
+       .Build());
+    }
+
+    public static IEnumerable<object[]> goodZipCodeAndZipRadius =>
+      goodZipcodeData.SelectMany(zipCode => goodZipRadius.Select(zipRadius =>
+        new object[] { zipCode[0], zipRadius[0] }
+      ));
+
+    [Theory]
+    [MemberData(nameof(goodZipCodeAndZipRadius))]
+    public void GeographyHavingZipcodeAndWithinZipRadius(string zipcode, int zipradius)
     {
       var payload = SearchPayloadBuilder.Create()
-        .WithSearchTerms("test")
-        .Sort(sortBuilder =>
-          sortBuilder.SortBy(SortOptions.BmfGrossReceipts)
-          .SortByAscending()
-        )
-        .Build();
+       .WithSearchTerms("test")
+       .Filters(filterBuilder =>
+         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingZipCode(zipcode)
+          .WithinZipRadius(zipradius))
+       )
+       .Build();
       var essentials = EssentialsResource.GetOrganization(payload);
       var result = JsonDocument.Parse(essentials);
       result.RootElement.TryGetProperty("code", out var response);
@@ -181,16 +264,31 @@ namespace Candid.GuideStarAPI.Tests
       Assert.NotNull(essentials);
     }
 
-    [Fact]
-    public void SortbyBmfGrossReceiptsDescending()
+    public static IEnumerable<object[]> goodMSAs =>
+      new List<object[]>
+      {
+        new object[] { new List<string>() { "MD - Wilmington, DE-NJ-MD",  } },
+        new object[] { new List<string>() { "TX - Tyler", "TX - Beaumont-Port Arthur" } },
+        new object[] { new List<string>() { "AR - Memphis, TN-AR-MS", "IN - Louisville, KY-IN", "MD - Wilmington, DE-NJ-MD"  } },
+        new object[] { new List<string>() { "ME - Portland" } },
+        new object[] { new List<string>() { "" } },
+        new object[] { new List<string>() { } },
+        new object[] { null },
+        //following values contian a mix of valid and invalid msa
+        new object[] { new List<string>() { "TX - Tyler", "TX - Not here texas" } },
+        new object[] { new List<string>() { "AR - Memphis, TN-AR-MS", "IN - LouisLouis, KY-IN", "MD - Wilmington, DE-NJ-MD"  } }
+      };
+
+    [Theory]
+    [MemberData(nameof(goodMSAs))]
+    public void GeographyHavingMSA(IEnumerable<string> msas)
     {
       var payload = SearchPayloadBuilder.Create()
-        .WithSearchTerms("test")
-        .Sort(sortBuilder =>
-          sortBuilder.SortBy(SortOptions.BmfGrossReceipts)
-          .SortByDescending()
-        )
-        .Build();
+       .WithSearchTerms("test")
+       .Filters(filterBuilder =>
+         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingMSA(msas))
+       )
+       .Build();
       var essentials = EssentialsResource.GetOrganization(payload);
       var result = JsonDocument.Parse(essentials);
       result.RootElement.TryGetProperty("code", out var response);
@@ -200,9 +298,32 @@ namespace Candid.GuideStarAPI.Tests
       Assert.NotNull(essentials);
     }
 
-    //Candid.GuideStarAPI.Geography
-    [Fact]
-    public void 
+    public static IEnumerable<object[]> badMSAs =>
+      new List<object[]>
+      {
+        new object[] { new List<string>() { "MD - Wilmington, DE-MD",  } },
+        new object[] { new List<string>() { "here place" } },
+        new object[] { new List<string>() { "multiple", "incorrect", "msa" } }
+      };
+
+    [Theory]
+    [MemberData(nameof(badMSAs))]
+    public void GeographyHavingMSAFails(IEnumerable<string> msas)
+    {
+      var payload = SearchPayloadBuilder.Create()
+       .WithSearchTerms("test")
+       .Filters(filterBuilder =>
+         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingMSA(msas))
+       )
+       .Build();
+     Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
+    }
+
+    //public GeographyBuilder HavingCity(IEnumerable<string> cities)
+
+
+    //public GeographyBuilder HavingCounty(IEnumerable<string> counties)
+
   }
 
   //Candid.GuideStarAPI.Response
