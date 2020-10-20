@@ -8,7 +8,6 @@ using Candid.GuideStarApiTest;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-
 namespace Candid.GuideStarAPI.Tests
 {
   public class BuilderTests
@@ -30,6 +29,17 @@ namespace Candid.GuideStarAPI.Tests
         GuideStarClient.SubscriptionKeys.Add(Domain.EssentialsV2, ESSENTIALS_KEY);
     }
 
+    private static void TestPayload(SearchPayload payload)
+    {
+      var essentials = EssentialsResource.GetOrganization(payload);
+      var result = JsonDocument.Parse(essentials);
+      result.RootElement.TryGetProperty("code", out var response);
+      Assert.True(response.TryGetInt32(out int code));
+      Assert.True(code == 200);
+
+      Assert.NotNull(essentials);
+    }
+
     /// <summary>
     /// This test ensures that Audits can be passed in and valid results return from the API.
     /// </summary>
@@ -45,13 +55,7 @@ namespace Candid.GuideStarAPI.Tests
                 organizationBuilder.Audits(auditBuilder => auditBuilder.HavingA133Audit())
           )
       ).Build();
-      var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonDocument.Parse(essentials);
-      result.RootElement.TryGetProperty("code", out var response);
-      Assert.True(response.TryGetInt32(out int code));
-      Assert.True(code == 200);
-
-      Assert.NotNull(essentials);
+      TestPayload(payload);
     }
 
     public static IEnumerable<object[]> SortPatameters =>
@@ -83,13 +87,7 @@ namespace Candid.GuideStarAPI.Tests
         }
         )
         .Build();
-      var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonDocument.Parse(essentials);
-      result.RootElement.TryGetProperty("code", out var response);
-      Assert.True(response.TryGetInt32(out int code));
-      Assert.True(code == 200);
-
-      Assert.NotNull(essentials);
+      TestPayload(payload);
     }
 
 
@@ -114,13 +112,7 @@ namespace Candid.GuideStarAPI.Tests
           filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingState(states))
         )
         .Build();
-      var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonDocument.Parse(essentials);
-      result.RootElement.TryGetProperty("code", out var response);
-      Assert.True(response.TryGetInt32(out int code));
-      Assert.True(code == 200);
-
-      Assert.NotNull(essentials);
+      TestPayload(payload);
     }
 
     public static IEnumerable<object[]> badStatesData =>
@@ -163,13 +155,7 @@ namespace Candid.GuideStarAPI.Tests
          filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingZipCode(zipcode))
        )
        .Build();
-      var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonDocument.Parse(essentials);
-      result.RootElement.TryGetProperty("code", out var response);
-      Assert.True(response.TryGetInt32(out int code));
-      Assert.True(code == 200);
-
-      Assert.NotNull(essentials);
+      TestPayload(payload);
     }
 
     public static IEnumerable<object[]> badZipcodeData =>
@@ -211,13 +197,7 @@ namespace Candid.GuideStarAPI.Tests
          filterBuilder.Geography(geographyBuilder => geographyBuilder.WithinZipRadius(zipRadius))
        )
        .Build();
-      var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonDocument.Parse(essentials);
-      result.RootElement.TryGetProperty("code", out var response);
-      Assert.True(response.TryGetInt32(out int code));
-      Assert.True(code == 200);
-
-      Assert.NotNull(essentials);
+      TestPayload(payload);
     }
 
     public static IEnumerable<object[]> badZipRadius =>
@@ -255,13 +235,7 @@ namespace Candid.GuideStarAPI.Tests
           .WithinZipRadius(zipradius))
        )
        .Build();
-      var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonDocument.Parse(essentials);
-      result.RootElement.TryGetProperty("code", out var response);
-      Assert.True(response.TryGetInt32(out int code));
-      Assert.True(code == 200);
-
-      Assert.NotNull(essentials);
+      TestPayload(payload);
     }
 
     public static IEnumerable<object[]> goodMSAs =>
@@ -289,13 +263,7 @@ namespace Candid.GuideStarAPI.Tests
          filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingMSA(msas))
        )
        .Build();
-      var essentials = EssentialsResource.GetOrganization(payload);
-      var result = JsonDocument.Parse(essentials);
-      result.RootElement.TryGetProperty("code", out var response);
-      Assert.True(response.TryGetInt32(out int code));
-      Assert.True(code == 200);
-
-      Assert.NotNull(essentials);
+      TestPayload(payload);
     }
 
     public static IEnumerable<object[]> badMSAs =>
