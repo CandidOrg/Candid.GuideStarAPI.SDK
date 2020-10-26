@@ -4,7 +4,7 @@ This library provides simplified access to the [GuideStar APIs](https://apiporta
 
 ## API Getting Started Guide
 
-[Here](https://candidorg-my.sharepoint.com/:w:/g/personal/alison_jannette_candid_org/EQ1mxwFp-RpCuG_TlyrhbckBBRPwYaFQqaen5Ja9Hu01WA?e=WFXCM2) 
+[Here](https://candid.my.salesforce.com/sfc/p/3h000001QSAr/a/3h000000TnBo/uQQygqyylOe2y81D9tCEgMJKCuHekZZ5aXDcrDoAvhQ) 
 is our getting started guide. This will help you get an account setup.
 
 ## SDK Setup
@@ -26,7 +26,7 @@ The above code will return the premier JSON document of EIN as a string.
  var premier = await PremierResource.GetOrganizationAsync(EIN);
  ```
 
-All request methods have and asynchronous and synchronous version.
+All request methods have an asynchronous and synchronous version.
 
 Our Essentials resource takes a search payload as input and then behaves similarly to our other resources.
 The return is a JSON collection of organization info that matches the payload parameters.
