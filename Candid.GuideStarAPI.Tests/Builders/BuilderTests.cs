@@ -325,6 +325,76 @@ namespace Candid.GuideStarAPI.Tests
       Assert.Throws<Exception>(() => SearchPayloadBuilder.Create().WithSearchTerms("test").Size(-1).Build());
     }
 
+    public static IEnumerable<object[]> goodAffils =>
+      new List<object[]>
+      {
+        new object[] {true, true, false, false},
+        new object[] {false, false, true, false},
+        new object[] {false, true, false, false},
+        new object[] {false, false, false, true},
+        new object[] {false, true, false, false}
+      };
+    [Theory]
+    [MemberData(nameof(goodAffils))]
+    public void Affiliations(bool headquarters, bool parent, bool subordinate, bool independent)
+    {
+      var payload = SearchPayloadBuilder.Create().Build();
+
+      //Independent orgs should have no other flags in this category
+      if (independent)
+      {
+        var payloadind = SearchPayloadBuilder.Create()
+       .WithSearchTerms("test")
+       .Filters(FilterBuilder =>
+       FilterBuilder.Organization(OrganizationBuilder =>
+       OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyIndependent())))
+       .Build();
+        payload = payloadind;
+      }
+     
+      //Subordinate orgs should have no other flags in this category
+      if (subordinate)
+      {
+        var payloadsub = SearchPayloadBuilder.Create()
+       .WithSearchTerms("test")
+       .Filters(FilterBuilder =>
+       FilterBuilder.Organization(OrganizationBuilder =>
+       OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlySubordinate())))
+       .Build();
+        payload = payloadsub;
+      }
+
+      //This logic is assuming that all headquarters should be parents but not all parents are headquarters
+      if (parent)
+      {
+        if (headquarters)
+        {
+          var payloadhq = SearchPayloadBuilder.Create()
+          .WithSearchTerms("test")
+          .Filters(FilterBuilder =>
+          FilterBuilder.Organization(OrganizationBuilder =>
+          OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyParents())));
+
+          payloadhq.Filters(FilterBuilder =>
+          FilterBuilder.Organization(OrganizationBuilder =>
+          OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyHeadquarters())));
+
+          payload = payloadhq.Build();
+        }
+        else
+        {
+          var payloadpar = SearchPayloadBuilder.Create()
+          .WithSearchTerms("test")
+          .Filters(FilterBuilder =>
+          FilterBuilder.Organization(OrganizationBuilder =>
+          OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyParents())))
+          .Build();
+          payload = payloadpar;
+        }
+      }
+
+      TestPayload(payload);
+    }
   }
 
   //Candid.GuideStarAPI.Response
