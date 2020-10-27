@@ -65,21 +65,47 @@ namespace Candid.GuideStarAPI.Tests.Builders
           ).Build();
             TestPayload(payload);
         }
-        [Fact]
-        public void HavingNTEEMajorCode_Works()
+        public static IEnumerable<object[]> NTEEMajorCodes =>
+      new List<object[]>
+      {
+            new object[] { new List<string> { "A Arts, Culture, and Humanities" } },
+            new object[] { new List<string> { "B Educational Institutions" } },
+      };
+
+        [Theory]
+        [MemberData(nameof(NTEEMajorCodes))]
+        public void HavingNTEEMajorCode_Works(List<string> NTEEMajorCodes)
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("A Arts, Culture, and Humanities");
-            foundationCodes.Add("B Educational Institutions");
+
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingNTEEMajorCode(foundationCodes)
+                    organizationBuilder.HavingNTEEMajorCode(NTEEMajorCodes)
               )
           ).Build();
             TestPayload(payload);
+        }
+        public static IEnumerable<object[]> NTEEMajorCodesBad =>
+     new List<object[]>
+     {
+            new object[] { new List<string> { " " } },
+            new object[] { new List<string> { null } },
+     };
+        [Theory]
+        [MemberData(nameof(NTEEMajorCodesBad))]
+        public void HavingNTEEMajorCode_Fails(List<string> NTEEMajorCodes)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingNTEEMajorCode(NTEEMajorCodes)
+              )
+          ).Build();
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
         }
         public static IEnumerable<object[]> foundationCodes =>
        new List<object[]>
