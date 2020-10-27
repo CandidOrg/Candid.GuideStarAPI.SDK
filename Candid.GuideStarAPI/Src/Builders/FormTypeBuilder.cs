@@ -1,31 +1,31 @@
 ﻿namespace Candid.GuideStarAPI
 {
-  public class FormTypeBuilder
-  {
-    protected Form_Types _formType;
-
-    private FormTypeBuilder() => _formType = new Form_Types();
-
-    internal static FormTypeBuilder Create() => new FormTypeBuilder();
-
-    public FormTypeBuilder Only990tRequired()
+    public class FormTypeBuilder
     {
-      _formType.required_to_file_990t = true;
-      return this;
-    }
+        protected Form_Types _formType;
 
-    public FormTypeBuilder OnlyF990()
-    {
-      _formType.f990 = true;
-      return this;
-    }
+        private FormTypeBuilder() => _formType = new Form_Types();
 
-    public FormTypeBuilder OnlyF990PF()
-    {
-      _formType.f990pf = true;
-      return this;
-    }
+        internal static FormTypeBuilder Create() => new FormTypeBuilder();
 
-    internal Form_Types Build() => _formType;
-  }
+        public FormTypeBuilder Only990tRequired()
+        {
+            _formType.required_to_file_990t = true;
+            return this;
+        }
+
+        public FormTypeBuilder OnlyF990()
+        {
+            _formType.f990 = true;
+            return this;
+        }
+
+        public FormTypeBuilder OnlyF990PF()
+        {
+            _formType.f990pf = true;
+            return this;
+        }
+
+        public Form_Types Build() => _formType;
+    }
 }
