@@ -50,11 +50,16 @@ namespace Candid.GuideStarAPI.Tests.Builders
 
             Assert.NotNull(essentials);
         }
-        [Fact]
-        public void HavingFoundationCode_Works()
+        public static IEnumerable<object[]> foundationCodesGood =>
+    new List<object[]>
+    {
+            new object[] { new List<string> { "17" } },
+    };
+
+        [Theory]
+        [MemberData(nameof(foundationCodesGood))]
+        public void HavingFoundationCode_Works(List<string> foundationCodes)
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("17");
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
@@ -65,7 +70,28 @@ namespace Candid.GuideStarAPI.Tests.Builders
           ).Build();
             TestPayload(payload);
         }
-        public static IEnumerable<object[]> NTEEMajorCodes =>
+        public static IEnumerable<object[]> foundationCodesBad =>
+    new List<object[]>
+    {
+            new object[] { new List<string> { " " } },
+            new object[] { new List<string> { null } },
+    };
+
+        [Theory]
+        [MemberData(nameof(foundationCodesBad))]
+        public void HavingFoundationCode_Fails(List<string> foundationCodes)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingFoundationCode(foundationCodes)
+              )
+          ).Build();
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
+        }
+        public static IEnumerable<object[]> NTEEMajorCodesGood =>
       new List<object[]>
       {
             new object[] { new List<string> { "A Arts, Culture, and Humanities" } },
@@ -73,7 +99,7 @@ namespace Candid.GuideStarAPI.Tests.Builders
       };
 
         [Theory]
-        [MemberData(nameof(NTEEMajorCodes))]
+        [MemberData(nameof(NTEEMajorCodesGood))]
         public void HavingNTEEMajorCode_Works(List<string> NTEEMajorCodes)
         {
 
