@@ -96,21 +96,47 @@ namespace Candid.GuideStarAPI.Tests.Builders
           ).Build();
             TestPayload(payload);
         }
-        [Fact]
-        public void HavingProfileLevel_Works()
+        public static IEnumerable<object[]> profileLevels =>
+       new List<object[]>
+       {
+            new object[] { new List<string> { "Platinum" } },
+            new object[] { new List<string> { "Platinum", "Silver" } },
+       };
+
+        [Theory]
+        [MemberData(nameof(profileLevels))]
+        public void HavingProfileLevel_Works(List<string> profileLevels)
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("Platinum");
-            foundationCodes.Add("Silver");
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingProfileLevel(foundationCodes)
+                    organizationBuilder.HavingProfileLevel(profileLevels)
               )
           ).Build();
             TestPayload(payload);
+        }
+        public static IEnumerable<object[]> profileLevelsBad =>
+       new List<object[]>
+       {
+            new object[] { new List<string> { " " } },
+            new object[] { new List<string> { null } },
+       };
+
+        [Theory]
+        [MemberData(nameof(profileLevelsBad))]
+        public void HavingProfileLevel_Fails(List<string> profileLevels)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingProfileLevel(profileLevels)
+              )
+          ).Build();
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
         }
         public static IEnumerable<object[]> subsectionsGood =>
         new List<object[]>
