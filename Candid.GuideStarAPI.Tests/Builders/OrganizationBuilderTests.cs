@@ -107,27 +107,27 @@ namespace Candid.GuideStarAPI.Tests.Builders
           ).Build();
             Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
         }
-        public static IEnumerable<object[]> foundationCodes =>
+        public static IEnumerable<object[]> nteeMinorCodesGood =>
        new List<object[]>
        {
             new object[] { new List<string> { "B01 Alliance/Advocacy Organizations" } },
        };
 
         [Theory]
-        [MemberData(nameof(foundationCodes))]
-        public void HavingNTEEMinorCode_Works(List<string> foundationCodes)
+        [MemberData(nameof(nteeMinorCodesGood))]
+        public void HavingNTEEMinorCode_Works(List<string> nteeMinorCodes)
         {
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingNTEEMinorCode(foundationCodes)
+                    organizationBuilder.HavingNTEEMinorCode(nteeMinorCodes)
               )
           ).Build();
             TestPayload(payload);
         }
-        public static IEnumerable<object[]> foundationCodesBad =>
+        public static IEnumerable<object[]> nteeMinorCodesBad =>
        new List<object[]>
        {
             new object[] { new List<string> { "bad ntee" } },
@@ -136,15 +136,15 @@ namespace Candid.GuideStarAPI.Tests.Builders
        };
 
         [Theory]
-        [MemberData(nameof(foundationCodesBad))]
-        public void HavingNTEEMinorCode_Fails(List<string> foundationCodes)
+        [MemberData(nameof(nteeMinorCodesBad))]
+        public void HavingNTEEMinorCode_Fails(List<string> nteeMinorCodes)
         {
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingNTEEMinorCode(foundationCodes)
+                    organizationBuilder.HavingNTEEMinorCode(nteeMinorCodes)
               )
           ).Build();
             Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
@@ -200,14 +200,14 @@ namespace Candid.GuideStarAPI.Tests.Builders
 
         [Theory]
         [MemberData(nameof(subsectionsGood))]
-        public void HavingSubsectionCode_Works(List<string> foundationCodes)
+        public void HavingSubsectionCode_Works(List<string> subsections)
         {
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingSubsectionCode(foundationCodes)
+                    organizationBuilder.HavingSubsectionCode(subsections)
               )
           ).Build();
             TestPayload(payload);
@@ -222,14 +222,14 @@ namespace Candid.GuideStarAPI.Tests.Builders
 
         [Theory]
         [MemberData(nameof(subsectionsBad))]
-        public void HavingSubsectionCode_Fails(List<string> foundationCodes)
+        public void HavingSubsectionCode_Fails(List<string> subsections)
         {
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingSubsectionCode(foundationCodes)
+                    organizationBuilder.HavingSubsectionCode(subsections)
               )
           ).Build();
             Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
