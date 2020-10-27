@@ -1,28 +1,28 @@
 ﻿namespace Candid.GuideStarAPI
 {
-  public class SpecificExclusionBuilder
-  {
-    protected Specific_Exclusions _exclusions;
-
-    private SpecificExclusionBuilder() => _exclusions = new Specific_Exclusions();
-
-    internal static SpecificExclusionBuilder Create() => new SpecificExclusionBuilder();
-
-    public SpecificExclusionBuilder ExcludeDefunctOrMergedOrganizations()
+    public class SpecificExclusionBuilder
     {
-      _exclusions.exclude_defunct_or_merged_organizations = true;
-      return this;
-    }
+        protected Specific_Exclusions _exclusions;
 
-    public SpecificExclusionBuilder ExcludeRevokedOrganizations()
-    {
-      _exclusions.exclude_revoked_organizations = true;
-      return this;
-    }
+        private SpecificExclusionBuilder() => _exclusions = new Specific_Exclusions();
 
-    internal Specific_Exclusions Build()
-    {
-      return _exclusions;
+        internal static SpecificExclusionBuilder Create() => new SpecificExclusionBuilder();
+
+        public SpecificExclusionBuilder ExcludeDefunctOrMergedOrganizations()
+        {
+            _exclusions.exclude_defunct_or_merged_organizations = true;
+            return this;
+        }
+
+        public SpecificExclusionBuilder ExcludeRevokedOrganizations()
+        {
+            _exclusions.exclude_revoked_organizations = true;
+            return this;
+        }
+
+        public Specific_Exclusions Build()
+        {
+            return _exclusions;
+        }
     }
-  }
 }
