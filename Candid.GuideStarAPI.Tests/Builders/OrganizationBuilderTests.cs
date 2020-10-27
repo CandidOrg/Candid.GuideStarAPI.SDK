@@ -112,11 +112,17 @@ namespace Candid.GuideStarAPI.Tests.Builders
           ).Build();
             TestPayload(payload);
         }
-        [Fact]
-        public void HavingSubsectionCode_Works()
+        public static IEnumerable<object[]> subsectionsGood =>
+        new List<object[]>
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("501(c)(3) Public Charity");
+            new object[] { new List<string> { "501(c)(3) Public Charity", "501(c)(3) Private Non-Operating Foundation" } },
+            new object[] { new List<string> { "501(c)(3) Private Non-Operating Foundation" } },
+        };
+
+        [Theory]
+        [MemberData(nameof(subsectionsGood))]
+        public void HavingSubsectionCode_Works(List<string> foundationCodes)
+        {
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
@@ -127,11 +133,35 @@ namespace Candid.GuideStarAPI.Tests.Builders
           ).Build();
             TestPayload(payload);
         }
+        public static IEnumerable<object[]> subsectionsBad =>
+        new List<object[]>
+        {
+            new object[] { new List<string> { "4014" } },
+            new object[] { new List<string> { "303" } },
+            new object[] { new List<string> { " " } },
+        };
+
+        [Theory]
+        [MemberData(nameof(subsectionsBad))]
+        public void HavingSubsectionCode_Fails(List<string> foundationCodes)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingSubsectionCode(foundationCodes)
+              )
+          ).Build();
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
+        }
+
         public static IEnumerable<object[]> boolParameters =>
     new List<object[]>
     {
         new object[] {  true},
         new object[] { false},
+        new object[] { null},
     };
 
         [Theory]
@@ -166,7 +196,8 @@ namespace Candid.GuideStarAPI.Tests.Builders
         [Fact]
         public void AffiliationType_Works()
         {
-            Action<AffiliationTypeBuilder> action = (AffiliationTypeBuilder) => {
+            Action<AffiliationTypeBuilder> action = (AffiliationTypeBuilder) =>
+            {
                 AffiliationTypeBuilder.OnlyParents();
             };
             var payload = SearchPayloadBuilder.Create()
@@ -182,7 +213,8 @@ namespace Candid.GuideStarAPI.Tests.Builders
         [Fact]
         public void SpecificExclusions_Works()
         {
-            Action<SpecificExclusionBuilder> action = (SpecificExclusionBuilder) => {
+            Action<SpecificExclusionBuilder> action = (SpecificExclusionBuilder) =>
+            {
                 SpecificExclusionBuilder.ExcludeDefunctOrMergedOrganizations();
             };
             var payload = SearchPayloadBuilder.Create()
@@ -215,7 +247,8 @@ namespace Candid.GuideStarAPI.Tests.Builders
         [Fact]
         public void FormTypes_Works()
         {
-            Action<FormTypeBuilder> action = (FormTypeBuilder) => {
+            Action<FormTypeBuilder> action = (FormTypeBuilder) =>
+            {
                 FormTypeBuilder.Only990tRequired();
             };
             var payload = SearchPayloadBuilder.Create()
@@ -231,7 +264,8 @@ namespace Candid.GuideStarAPI.Tests.Builders
         [Fact]
         public void Audits_Works()
         {
-            Action<AuditBuilder> action = (AffiliationTypeBuilder) => {
+            Action<AuditBuilder> action = (AffiliationTypeBuilder) =>
+            {
                 AffiliationTypeBuilder.HavingA133Audit();
             };
             var payload = SearchPayloadBuilder.Create()
