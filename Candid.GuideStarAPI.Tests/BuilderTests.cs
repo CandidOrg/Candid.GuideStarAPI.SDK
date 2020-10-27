@@ -292,6 +292,39 @@ namespace Candid.GuideStarAPI.Tests
 
     //public GeographyBuilder HavingCounty(IEnumerable<string> counties)
 
+    [Fact]
+    public void PayloadFrom()
+    {
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .From(10)
+        .Build();
+      TestPayload(payload);
+    }
+
+    [Fact]
+    public void PayloadFromFails()
+    {
+      Assert.Throws<Exception>(() => SearchPayloadBuilder.Create().WithSearchTerms("test").From(-1).Build());
+     
+    }
+
+    [Fact]
+    public void PayloadTo()
+    {
+      var payload = SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .Size(10)
+        .Build();
+      TestPayload(payload);
+    }
+
+    [Fact]
+    public void PayloadToFails()
+    {
+      Assert.Throws<Exception>(() => SearchPayloadBuilder.Create().WithSearchTerms("test").Size(-1).Build());
+    }
+
   }
 
   //Candid.GuideStarAPI.Response
