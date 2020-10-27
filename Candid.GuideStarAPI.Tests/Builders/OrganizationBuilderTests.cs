@@ -81,11 +81,16 @@ namespace Candid.GuideStarAPI.Tests.Builders
           ).Build();
             TestPayload(payload);
         }
-        [Fact]
-        public void HavingNTEEMinorCode_Works()
+        public static IEnumerable<object[]> foundationCodes =>
+       new List<object[]>
+       {
+            new object[] { new List<string> { "B01 Alliance/Advocacy Organizations" } },
+       };
+
+        [Theory]
+        [MemberData(nameof(foundationCodes))]
+        public void HavingNTEEMinorCode_Works(List<string> foundationCodes)
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("B01 Alliance/Advocacy Organizations - 4807");
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
@@ -95,6 +100,28 @@ namespace Candid.GuideStarAPI.Tests.Builders
               )
           ).Build();
             TestPayload(payload);
+        }
+        public static IEnumerable<object[]> foundationCodesBad =>
+       new List<object[]>
+       {
+            new object[] { new List<string> { "bad ntee" } },
+            new object[] { new List<string> { " " } },
+            new object[] { new List<string> { null } },
+       };
+
+        [Theory]
+        [MemberData(nameof(foundationCodesBad))]
+        public void HavingNTEEMinorCode_Fails(List<string> foundationCodes)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingNTEEMinorCode(foundationCodes)
+              )
+          ).Build();
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
         }
         public static IEnumerable<object[]> profileLevels =>
        new List<object[]>
