@@ -101,7 +101,7 @@ namespace Candid.GuideStarAPI.Tests
     [Fact]
     public void PayloadFromFails()
     {
-      Assert.Throws<Exception>(() => SearchPayloadBuilder.Create()
+      Assert.Throws<ArgumentOutOfRangeException>(() => SearchPayloadBuilder.Create()
         .WithSearchTerms("test")
         .From(-1)
         .Build());
@@ -120,7 +120,7 @@ namespace Candid.GuideStarAPI.Tests
     [Fact]
     public void PayloadToFails()
     {
-      Assert.Throws<Exception>(() => SearchPayloadBuilder.Create()
+      Assert.Throws<ArgumentOutOfRangeException>(() => SearchPayloadBuilder.Create()
         .WithSearchTerms("test")
         .Size(-1)
         .Build());

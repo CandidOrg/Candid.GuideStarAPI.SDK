@@ -23,7 +23,7 @@ namespace Candid.GuideStarAPI
         _request.from = from;
         return this;
       }
-      throw new Exception("From must be greater than 0");
+      throw new ArgumentOutOfRangeException("From must be greater than 0");
     }
 
     public SearchPayloadBuilder Size(int to)
@@ -33,7 +33,7 @@ namespace Candid.GuideStarAPI
         _request.size = to;
         return this;
       }
-      throw new Exception("To must be greater than 0");
+      throw new ArgumentOutOfRangeException("To must be greater than 0");
     }
 
     public SearchPayloadBuilder Sort(Action<SortBuilder> action)

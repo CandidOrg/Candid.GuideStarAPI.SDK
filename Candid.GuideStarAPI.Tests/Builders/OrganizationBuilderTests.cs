@@ -263,12 +263,12 @@ new List<object[]>
     }
 
     public static IEnumerable<object[]> boolParameters =>
-new List<object[]>
-{
-        new object[] {  true},
-        new object[] { false},
-        new object[] { null},
-};
+    new List<object[]>
+    {
+            new object[] {  true},
+            new object[] { false},
+            new object[] { null},
+    };
 
     [Theory]
     [MemberData(nameof(boolParameters))]
@@ -281,7 +281,8 @@ new List<object[]>
             organizationBuilder =>
               organizationBuilder.IsOnBMF(bmfStatus)
         )
-    ).Build();
+      )
+      .Build();
       //TestPayload(payload);
     }
 
@@ -296,7 +297,8 @@ new List<object[]>
             organizationBuilder =>
               organizationBuilder.IsPub78Verified(IsPub78Verified)
         )
-    ).Build();
+      )
+      .Build();
       //TestPayload(payload);
     }
     [Fact]
@@ -313,7 +315,8 @@ new List<object[]>
             organizationBuilder =>
               organizationBuilder.AffiliationType(action)
         )
-    ).Build();
+      )
+      .Build();
       //TestPayload(payload);
     }
     [Fact]
@@ -330,15 +333,26 @@ new List<object[]>
             organizationBuilder =>
               organizationBuilder.SpecificExclusions(action)
         )
-    ).Build();
+      )
+      .Build();
       //TestPayload(payload);
     }
-    [Fact]
-    public void NumberOfEmployees_Works()
+    public static IEnumerable<object[]> NumberOfEmployeesGood =>
+    new List<object[]>
+    {
+            new object[] {  1,20},
+            new object[] { 20,30},
+            new object[] {  55,56},
+    };
+
+    [Theory]
+    [MemberData(nameof(NumberOfEmployeesGood))]
+    public void NumberOfEmployees_Works(int min, int max)
     {
       Action<MinMaxBuilder> action = (MinMaxBuilder) =>
       {
-        MinMaxBuilder.HavingMinimum(1);
+        MinMaxBuilder.HavingMinimum(min);
+        MinMaxBuilder.HavingMaximum(max);
       };
       var payload = SearchPayloadBuilder.Create()
       .Filters(
@@ -347,8 +361,59 @@ new List<object[]>
             organizationBuilder =>
               organizationBuilder.NumberOfEmployees(action)
         )
-    ).Build();
+      )
+      .Build();
       //TestPayload(payload);
+    }
+    [Fact]
+    public void NumberOfEmployees_Throws_HavingMaximumGreaterThanZero()//System.Exception : HavingMaximum must be greater than 0
+    {
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        Action<MinMaxBuilder> action = (MinMaxBuilder) =>
+              {
+                MinMaxBuilder.HavingMinimum(1);
+                MinMaxBuilder.HavingMaximum(-1);
+              };
+        var payload = SearchPayloadBuilder.Create()
+          .Filters(
+            filterBuilder => filterBuilder
+            .Organization(
+                organizationBuilder =>
+                  organizationBuilder.NumberOfEmployees(action)
+            )
+          )
+          .Build();
+      });
+
+    }
+    public static IEnumerable<object[]> NumberOfEmployeesBad =>
+    new List<object[]>
+    {
+        new object[] {  2,1},
+        new object[] {  0,0},
+        new object[] {  55,55},
+    };
+
+    [Theory]
+    [MemberData(nameof(NumberOfEmployeesBad))]
+    public void NumberOfEmployees_Fails(int min, int max)
+    {
+      Action<MinMaxBuilder> action = (MinMaxBuilder) =>
+      {
+        MinMaxBuilder.HavingMinimum(min);
+        MinMaxBuilder.HavingMaximum(max);
+      };
+      var payload = SearchPayloadBuilder.Create()
+      .Filters(
+        filterBuilder => filterBuilder
+        .Organization(
+            organizationBuilder =>
+              organizationBuilder.NumberOfEmployees(action)
+        )
+      )
+      .Build();
+      Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
     }
     [Fact]
     public void FormTypes_Works()
@@ -364,7 +429,8 @@ new List<object[]>
             organizationBuilder =>
               organizationBuilder.FormTypes(action)
         )
-    ).Build();
+      )
+      .Build();
       //TestPayload(payload);
     }
     [Fact]
@@ -381,7 +447,8 @@ new List<object[]>
             organizationBuilder =>
               organizationBuilder.Audits(action)
         )
-    ).Build();
+      )
+      .Build();
       //TestPayload(payload);
     }
 
