@@ -1,17 +1,12 @@
-﻿using System;
-using System.Text.Json;
-using Candid.GuideStarAPI.Resources;
-using Candid.GuideStarApiTest;
-using Microsoft.Extensions.Configuration;
-using Xunit;
+﻿using System.Collections.Generic;
 using System.Net.Http;
-using Candid.GuideStarAPI;
-using System.Collections.Generic;
 using System.Text;
+using Xunit;
 
 namespace Candid.GuideStarAPI.Tests
 {
-  public class RequestTests 
+  [Collection("API Tests Collection")]
+  public class RequestTests
   {
     [Fact]
     public void Construct_GetNoParams_ExpectAbsoluteURI()
@@ -34,7 +29,7 @@ namespace Candid.GuideStarAPI.Tests
     public void Construct_Post_ExpectPostParams()
     {
       var key = new SubscriptionKey("01234567890123456789012345678901");
-      
+
       // Set up parameters
       var parms = new Dictionary<string, string>();
       parms.Add("one", "two");

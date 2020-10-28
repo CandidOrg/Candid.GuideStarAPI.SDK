@@ -3,6 +3,7 @@ using Xunit;
 
 namespace Candid.GuideStarAPI.Tests
 {
+  [Collection("API Tests Collection")]
   public class EINTest
   {
     [Fact]

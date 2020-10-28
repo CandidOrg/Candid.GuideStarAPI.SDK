@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using Candid.GuideStarAPI.Resources;
 using Candid.GuideStarApiTest;
@@ -7,6 +8,7 @@ using Xunit;
 
 namespace Candid.GuideStarAPI.Tests
 {
+  
   public class BuilderTests
   {
     private readonly IConfiguration _config;
@@ -52,7 +54,7 @@ namespace Candid.GuideStarAPI.Tests
                 organizationBuilder.Audits(auditBuilder => auditBuilder.HavingA133Audit())
           )
       ).Build();
-      TestPayload(payload);
+      //TestPayload(payload);
     }
 
     public static IEnumerable<object[]> SortPatameters =>
@@ -81,166 +83,10 @@ namespace Candid.GuideStarAPI.Tests
             sortBuilder.SortByDescending();
           else
             sortBuilder.SortByDescending();
-        }
-        )
+        })
         .Build();
-      TestPayload(payload);
+      //TestPayload(payload);
     }
-
-    public static IEnumerable<object[]> goodZipcodeData =>
-      new List<object[]>
-      {
-        new object[] { "90210" },
-        new object[] { "10001" },
-        new object[] { "80014" }
-      };
-
-    [Theory]
-    [MemberData(nameof(goodZipcodeData))]
-    public void GeographyZipCode(string zipcode)
-    {
-      var payload = SearchPayloadBuilder.Create()
-       .WithSearchTerms("test")
-       .Filters(filterBuilder =>
-         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingZipCode(zipcode))
-       )
-       .Build();
-      TestPayload(payload);
-    }
-
-    public static IEnumerable<object[]> badZipcodeData =>
-      new List<object[]>
-      {
-        new object[] { "902101" },
-        new object[] { "9021" },
-        new object[] { "" },
-        new object[] { null }
-      };
-
-    [Theory]
-    [MemberData(nameof(badZipcodeData))]
-    public void GeographyZipCodeFails(string zipcode)
-    {
-      Assert.Throws<ArgumentOutOfRangeException>(() => SearchPayloadBuilder.Create()
-       .WithSearchTerms("test")
-       .Filters(filterBuilder =>
-         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingZipCode(zipcode))
-       )
-       .Build());
-    }
-
-    public static IEnumerable<object[]> goodZipRadius =>
-      new List<object[]>
-      {
-        new object[] { 0 },
-        new object[] { 10 },
-        new object[] { 50 }
-      };
-
-    [Theory]
-    [MemberData(nameof(goodZipRadius))]
-    public void GeographyWithinZipRadius(int zipRadius)
-    {
-      var payload = SearchPayloadBuilder.Create()
-       .WithSearchTerms("test")
-       .Filters(filterBuilder =>
-         filterBuilder.Geography(geographyBuilder => geographyBuilder.WithinZipRadius(zipRadius))
-       )
-       .Build();
-      TestPayload(payload);
-    }
-
-    public static IEnumerable<object[]> badZipRadius =>
-     new List<object[]>
-     {
-        new object[] { -1 },
-        new object[] { 51}
-     };
-
-    [Theory]
-    [MemberData(nameof(badZipRadius))]
-    public void GeographyWithinZipRadiusFails(int zipRadius)
-    {
-      Assert.Throws<ArgumentOutOfRangeException>(() => SearchPayloadBuilder.Create()
-       .WithSearchTerms("test")
-       .Filters(filterBuilder =>
-         filterBuilder.Geography(geographyBuilder => geographyBuilder.WithinZipRadius(zipRadius))
-       )
-       .Build());
-    }
-
-    public static IEnumerable<object[]> goodZipCodeAndZipRadius =>
-      goodZipcodeData.SelectMany(zipCode => goodZipRadius.Select(zipRadius =>
-        new object[] { zipCode[0], zipRadius[0] }
-      ));
-
-    [Theory]
-    [MemberData(nameof(goodZipCodeAndZipRadius))]
-    public void GeographyHavingZipcodeAndWithinZipRadius(string zipcode, int zipradius)
-    {
-      var payload = SearchPayloadBuilder.Create()
-       .WithSearchTerms("test")
-       .Filters(filterBuilder =>
-         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingZipCode(zipcode)
-          .WithinZipRadius(zipradius))
-       )
-       .Build();
-      TestPayload(payload);
-    }
-
-    public static IEnumerable<object[]> goodMSAs =>
-      new List<object[]>
-      {
-        new object[] { new List<string>() { "MD - Wilmington, DE-NJ-MD",  } },
-        new object[] { new List<string>() { "TX - Tyler", "TX - Beaumont-Port Arthur" } },
-        new object[] { new List<string>() { "AR - Memphis, TN-AR-MS", "IN - Louisville, KY-IN", "MD - Wilmington, DE-NJ-MD"  } },
-        new object[] { new List<string>() { "ME - Portland" } },
-        new object[] { new List<string>() { "" } },
-        new object[] { new List<string>() { } },
-        new object[] { null },
-        //following values contian a mix of valid and invalid msa
-        new object[] { new List<string>() { "TX - Tyler", "TX - Not here texas" } },
-        new object[] { new List<string>() { "AR - Memphis, TN-AR-MS", "IN - LouisLouis, KY-IN", "MD - Wilmington, DE-NJ-MD"  } }
-      };
-
-    [Theory]
-    [MemberData(nameof(goodMSAs))]
-    public void GeographyHavingMSA(IEnumerable<string> msas)
-    {
-      var payload = SearchPayloadBuilder.Create()
-       .WithSearchTerms("test")
-       .Filters(filterBuilder =>
-         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingMSA(msas))
-       )
-       .Build();
-      TestPayload(payload);
-    }
-
-    public static IEnumerable<object[]> badMSAs =>
-      new List<object[]>
-      {
-        new object[] { new List<string>() { "MD - Wilmington, DE-MD",  } },
-        new object[] { new List<string>() { "here place" } },
-        new object[] { new List<string>() { "multiple", "incorrect", "msa" } }
-      };
-
-    [Theory]
-    [MemberData(nameof(badMSAs))]
-    public void GeographyHavingMSAFails(IEnumerable<string> msas)
-    {
-      var payload = SearchPayloadBuilder.Create()
-       .WithSearchTerms("test")
-       .Filters(filterBuilder =>
-         filterBuilder.Geography(geographyBuilder => geographyBuilder.HavingMSA(msas))
-       )
-       .Build();
-     Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
-    }
-
-    //public GeographyBuilder HavingCity(IEnumerable<string> cities)
-
-
-    //public GeographyBuilder HavingCounty(IEnumerable<string> counties)
 
     [Fact]
     public void PayloadFrom()
@@ -249,14 +95,16 @@ namespace Candid.GuideStarAPI.Tests
         .WithSearchTerms("test")
         .From(10)
         .Build();
-      TestPayload(payload);
+      //TestPayload(payload);
     }
 
     [Fact]
     public void PayloadFromFails()
     {
-      Assert.Throws<Exception>(() => SearchPayloadBuilder.Create().WithSearchTerms("test").From(-1).Build());
-     
+      Assert.Throws<Exception>(() => SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .From(-1)
+        .Build());
     }
 
     [Fact]
@@ -266,13 +114,16 @@ namespace Candid.GuideStarAPI.Tests
         .WithSearchTerms("test")
         .Size(10)
         .Build();
-      TestPayload(payload);
+      //TestPayload(payload);
     }
 
     [Fact]
     public void PayloadToFails()
     {
-      Assert.Throws<Exception>(() => SearchPayloadBuilder.Create().WithSearchTerms("test").Size(-1).Build());
+      Assert.Throws<Exception>(() => SearchPayloadBuilder.Create()
+        .WithSearchTerms("test")
+        .Size(-1)
+        .Build());
     }
 
     public static IEnumerable<object[]> goodAffils =>
@@ -281,9 +132,9 @@ namespace Candid.GuideStarAPI.Tests
         new object[] {true, true, false, false},
         new object[] {false, false, true, false},
         new object[] {false, true, false, false},
-        new object[] {false, false, false, true},
-        new object[] {false, true, false, false}
+        new object[] {false, false, false, true}
       };
+
     [Theory]
     [MemberData(nameof(goodAffils))]
     public void Affiliations(bool headquarters, bool parent, bool subordinate, bool independent)
@@ -294,23 +145,23 @@ namespace Candid.GuideStarAPI.Tests
       if (independent)
       {
         var payloadind = SearchPayloadBuilder.Create()
-       .WithSearchTerms("test")
-       .Filters(FilterBuilder =>
-       FilterBuilder.Organization(OrganizationBuilder =>
-       OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyIndependent())))
-       .Build();
+         .WithSearchTerms("test")
+         .Filters(FilterBuilder =>
+           FilterBuilder.Organization(OrganizationBuilder =>
+             OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyIndependent())))
+         .Build();
         payload = payloadind;
       }
-     
+
       //Subordinate orgs should have no other flags in this category
       if (subordinate)
       {
         var payloadsub = SearchPayloadBuilder.Create()
-       .WithSearchTerms("test")
-       .Filters(FilterBuilder =>
-       FilterBuilder.Organization(OrganizationBuilder =>
-       OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlySubordinate())))
-       .Build();
+         .WithSearchTerms("test")
+         .Filters(FilterBuilder =>
+           FilterBuilder.Organization(OrganizationBuilder =>
+            OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlySubordinate())))
+         .Build();
         payload = payloadsub;
       }
 
@@ -320,44 +171,30 @@ namespace Candid.GuideStarAPI.Tests
         if (headquarters)
         {
           var payloadhq = SearchPayloadBuilder.Create()
-          .WithSearchTerms("test")
-          .Filters(FilterBuilder =>
-          FilterBuilder.Organization(OrganizationBuilder =>
-          OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyParents())));
+            .WithSearchTerms("test")
+            .Filters(FilterBuilder =>
+            FilterBuilder.Organization(OrganizationBuilder =>
+              OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyParents())));
 
           payloadhq.Filters(FilterBuilder =>
-          FilterBuilder.Organization(OrganizationBuilder =>
-          OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyHeadquarters())));
+            FilterBuilder.Organization(OrganizationBuilder =>
+              OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyHeadquarters())));
 
           payload = payloadhq.Build();
         }
         else
         {
           var payloadpar = SearchPayloadBuilder.Create()
-          .WithSearchTerms("test")
-          .Filters(FilterBuilder =>
-          FilterBuilder.Organization(OrganizationBuilder =>
-          OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyParents())))
-          .Build();
+            .WithSearchTerms("test")
+            .Filters(FilterBuilder =>
+              FilterBuilder.Organization(OrganizationBuilder =>
+                OrganizationBuilder.AffiliationType(AffiliationTypeBuilder => AffiliationTypeBuilder.OnlyParents())))
+            .Build();
           payload = payloadpar;
         }
       }
 
-      TestPayload(payload);
+      //TestPayload(payload);
     }
   }
-
-  //Candid.GuideStarAPI.Response
-  //Candid.GuideStarAPI.Geography
-  //Candid.GuideStarAPI.ApiException
-  //Candid.GuideStarAPI.Affiliation_Type
-  //Candid.GuideStarAPI.Filters
-  //Candid.GuideStarAPI.Financials
-  //Candid.GuideStarAPI.Form_Types
-  //Candid.GuideStarAPI.Min_Max
-  //Candid.GuideStarAPI.Specific_Exclusions
-  //Candid.GuideStarAPI.ApiConnectionException
-  //Candid.GuideStarAPI.Audits
-
-
 }
