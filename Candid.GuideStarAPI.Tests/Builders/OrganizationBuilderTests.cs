@@ -50,11 +50,16 @@ namespace Candid.GuideStarAPI.Tests.Builders
 
             Assert.NotNull(essentials);
         }
-        [Fact]
-        public void HavingFoundationCode_Works()
+        public static IEnumerable<object[]> foundationCodesGood =>
+    new List<object[]>
+    {
+            new object[] { new List<string> { "17" } },
+    };
+
+        [Theory]
+        [MemberData(nameof(foundationCodesGood))]
+        public void HavingFoundationCode_Works(List<string> foundationCodes)
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("17");
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
@@ -65,73 +70,203 @@ namespace Candid.GuideStarAPI.Tests.Builders
           ).Build();
             TestPayload(payload);
         }
-        [Fact]
-        public void HavingNTEEMajorCode_Works()
+        public static IEnumerable<object[]> foundationCodesBad =>
+    new List<object[]>
+    {
+            new object[] { new List<string> { " " } },
+            new object[] { new List<string> { null } },
+    };
+
+        [Theory]
+        [MemberData(nameof(foundationCodesBad))]
+        public void HavingFoundationCode_Fails(List<string> foundationCodes)
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("A Arts, Culture, and Humanities");
-            foundationCodes.Add("B Educational Institutions");
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingNTEEMajorCode(foundationCodes)
+                    organizationBuilder.HavingFoundationCode(foundationCodes)
               )
           ).Build();
-            TestPayload(payload);
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
         }
-        [Fact]
-        public void HavingNTEEMinorCode_Works()
+        public static IEnumerable<object[]> NTEEMajorCodesGood =>
+      new List<object[]>
+      {
+            new object[] { new List<string> { "A Arts, Culture, and Humanities" } },
+            new object[] { new List<string> { "B Educational Institutions" } },
+      };
+
+        [Theory]
+        [MemberData(nameof(NTEEMajorCodesGood))]
+        public void HavingNTEEMajorCode_Works(List<string> NTEEMajorCodes)
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("B01 Alliance/Advocacy Organizations - 4807");
+
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingNTEEMinorCode(foundationCodes)
+                    organizationBuilder.HavingNTEEMajorCode(NTEEMajorCodes)
               )
           ).Build();
             TestPayload(payload);
         }
-        [Fact]
-        public void HavingProfileLevel_Works()
+        public static IEnumerable<object[]> NTEEMajorCodesBad =>
+     new List<object[]>
+     {
+            new object[] { new List<string> { " " } },
+            new object[] { new List<string> { null } },
+     };
+        [Theory]
+        [MemberData(nameof(NTEEMajorCodesBad))]
+        public void HavingNTEEMajorCode_Fails(List<string> NTEEMajorCodes)
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("Platinum");
-            foundationCodes.Add("Silver");
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingProfileLevel(foundationCodes)
+                    organizationBuilder.HavingNTEEMajorCode(NTEEMajorCodes)
               )
           ).Build();
-            TestPayload(payload);
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
         }
-        [Fact]
-        public void HavingSubsectionCode_Works()
+        public static IEnumerable<object[]> nteeMinorCodesGood =>
+       new List<object[]>
+       {
+            new object[] { new List<string> { "B01 Alliance/Advocacy Organizations" } },
+       };
+
+        [Theory]
+        [MemberData(nameof(nteeMinorCodesGood))]
+        public void HavingNTEEMinorCode_Works(List<string> nteeMinorCodes)
         {
-            List<string> foundationCodes = new List<string>();
-            foundationCodes.Add("501(c)(3) Public Charity");
             var payload = SearchPayloadBuilder.Create()
             .Filters(
               filterBuilder => filterBuilder
               .Organization(
                   organizationBuilder =>
-                    organizationBuilder.HavingSubsectionCode(foundationCodes)
+                    organizationBuilder.HavingNTEEMinorCode(nteeMinorCodes)
               )
           ).Build();
             TestPayload(payload);
         }
+        public static IEnumerable<object[]> nteeMinorCodesBad =>
+       new List<object[]>
+       {
+            new object[] { new List<string> { "bad ntee" } },
+            new object[] { new List<string> { " " } },
+            new object[] { new List<string> { null } },
+       };
+
+        [Theory]
+        [MemberData(nameof(nteeMinorCodesBad))]
+        public void HavingNTEEMinorCode_Fails(List<string> nteeMinorCodes)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingNTEEMinorCode(nteeMinorCodes)
+              )
+          ).Build();
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
+        }
+        public static IEnumerable<object[]> profileLevels =>
+       new List<object[]>
+       {
+            new object[] { new List<string> { "Platinum" } },
+            new object[] { new List<string> { "Platinum", "Silver" } },
+       };
+
+        [Theory]
+        [MemberData(nameof(profileLevels))]
+        public void HavingProfileLevel_Works(List<string> profileLevels)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingProfileLevel(profileLevels)
+              )
+          ).Build();
+            TestPayload(payload);
+        }
+        public static IEnumerable<object[]> profileLevelsBad =>
+       new List<object[]>
+       {
+            new object[] { new List<string> { " " } },
+            new object[] { new List<string> { null } },
+       };
+
+        [Theory]
+        [MemberData(nameof(profileLevelsBad))]
+        public void HavingProfileLevel_Fails(List<string> profileLevels)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingProfileLevel(profileLevels)
+              )
+          ).Build();
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
+        }
+        public static IEnumerable<object[]> subsectionsGood =>
+        new List<object[]>
+        {
+            new object[] { new List<string> { "501(c)(3) Public Charity", "501(c)(3) Private Non-Operating Foundation" } },
+            new object[] { new List<string> { "501(c)(3) Private Non-Operating Foundation" } },
+        };
+
+        [Theory]
+        [MemberData(nameof(subsectionsGood))]
+        public void HavingSubsectionCode_Works(List<string> subsections)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingSubsectionCode(subsections)
+              )
+          ).Build();
+            TestPayload(payload);
+        }
+        public static IEnumerable<object[]> subsectionsBad =>
+        new List<object[]>
+        {
+            new object[] { new List<string> { "4014" } },
+            new object[] { new List<string> { "303" } },
+            new object[] { new List<string> { " " } },
+        };
+
+        [Theory]
+        [MemberData(nameof(subsectionsBad))]
+        public void HavingSubsectionCode_Fails(List<string> subsections)
+        {
+            var payload = SearchPayloadBuilder.Create()
+            .Filters(
+              filterBuilder => filterBuilder
+              .Organization(
+                  organizationBuilder =>
+                    organizationBuilder.HavingSubsectionCode(subsections)
+              )
+          ).Build();
+            Assert.Throws<ApiException>(() => EssentialsResource.GetOrganization(payload));
+        }
+
         public static IEnumerable<object[]> boolParameters =>
     new List<object[]>
     {
         new object[] {  true},
         new object[] { false},
+        new object[] { null},
     };
 
         [Theory]
@@ -166,7 +301,8 @@ namespace Candid.GuideStarAPI.Tests.Builders
         [Fact]
         public void AffiliationType_Works()
         {
-            Action<AffiliationTypeBuilder> action = (AffiliationTypeBuilder) => {
+            Action<AffiliationTypeBuilder> action = (AffiliationTypeBuilder) =>
+            {
                 AffiliationTypeBuilder.OnlyParents();
             };
             var payload = SearchPayloadBuilder.Create()
@@ -182,7 +318,8 @@ namespace Candid.GuideStarAPI.Tests.Builders
         [Fact]
         public void SpecificExclusions_Works()
         {
-            Action<SpecificExclusionBuilder> action = (SpecificExclusionBuilder) => {
+            Action<SpecificExclusionBuilder> action = (SpecificExclusionBuilder) =>
+            {
                 SpecificExclusionBuilder.ExcludeDefunctOrMergedOrganizations();
             };
             var payload = SearchPayloadBuilder.Create()
@@ -215,7 +352,8 @@ namespace Candid.GuideStarAPI.Tests.Builders
         [Fact]
         public void FormTypes_Works()
         {
-            Action<FormTypeBuilder> action = (FormTypeBuilder) => {
+            Action<FormTypeBuilder> action = (FormTypeBuilder) =>
+            {
                 FormTypeBuilder.Only990tRequired();
             };
             var payload = SearchPayloadBuilder.Create()
@@ -231,7 +369,8 @@ namespace Candid.GuideStarAPI.Tests.Builders
         [Fact]
         public void Audits_Works()
         {
-            Action<AuditBuilder> action = (AffiliationTypeBuilder) => {
+            Action<AuditBuilder> action = (AffiliationTypeBuilder) =>
+            {
                 AffiliationTypeBuilder.HavingA133Audit();
             };
             var payload = SearchPayloadBuilder.Create()
