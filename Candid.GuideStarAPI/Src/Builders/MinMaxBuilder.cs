@@ -10,24 +10,24 @@ namespace Candid.GuideStarAPI
 
     internal static MinMaxBuilder Create() => new MinMaxBuilder();
 
-    public MinMaxBuilder HavingMaximum(int numberEmployees)
+    public MinMaxBuilder HavingMaximum(long numberEmployees)
     {
       if (numberEmployees >= 0)
       {
         _minMax.max = numberEmployees;
         return this;
       }
-      throw new Exception("HavingMaximum must be greater than 0");
+      throw new ArgumentOutOfRangeException("HavingMaximum must be greater than 0");
     }
 
-    public MinMaxBuilder HavingMinimum(int numberEmployees)
+    public MinMaxBuilder HavingMinimum(long numberEmployees)
     {
       if (numberEmployees >= 0)
       {
         _minMax.min = numberEmployees;
         return this;
       }
-      throw new Exception("HavingMinimum must be greater than 0");
+      throw new ArgumentOutOfRangeException("HavingMinimum must be greater than 0");
     }
 
     internal Min_Max Build() => _minMax;

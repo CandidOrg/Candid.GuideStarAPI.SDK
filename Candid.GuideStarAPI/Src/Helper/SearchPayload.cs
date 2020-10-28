@@ -96,7 +96,7 @@ namespace Candid.GuideStarAPI
 
   public class Min_Max
   {
-    public int? min { get; set; }
-    public int? max { get; set; }
+    public long? min { get; set; }
+    public long? max { get; set; }
   }
 }
