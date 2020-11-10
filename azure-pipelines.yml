@@ -9,13 +9,7 @@ trigger:
 pool:
   vmImage: windows-latest
 
-variables:
-  Major: '1'
-  Minor: '0'
-  Patch: '0'
-
 steps:
-
 - task: AzureKeyVault@1
   inputs:
     azureSubscription: 'AzureResources'
@@ -49,23 +43,17 @@ steps:
   inputs:
     command: 'build'
     projects: '**/*.csproj'
-    versioningScheme: 'byPrereleaseNumber'
 - task: DotNetCoreCLI@2
   displayName: 'Test'
   inputs:
     command: 'test'
     projects: '**/*.Tests.csproj'
-
 - task: DotNetCoreCLI@2
   displayName: 'Pack'
   inputs:
     command: pack
     nobuild: true
     packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
-    versioningScheme: byEnvVar
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
 - task: PowerShell@2
 #found basic explanation here: https://github.com/microsoft/azure-pipelines-tasks/issues/13553
   displayName: 'Signing package'
