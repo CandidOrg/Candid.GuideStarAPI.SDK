@@ -25,20 +25,13 @@ namespace Candid.GuideStarAPI.Tests.Resources
 
       SetSubscriptionKeys();
     }
+
     private static void SetSubscriptionKeys()
     {
-      // Only do this once
-      if (!GuideStarClient.SubscriptionKeys.IsEmpty())
-        return;
       if (!string.IsNullOrEmpty(CHARITY_CHECK_KEY))
         GuideStarClient.SubscriptionKeys.Add(Domain.CharityCheckV1, CHARITY_CHECK_KEY);
-      if (!string.IsNullOrEmpty(ESSENTIALS_KEY))
-        GuideStarClient.SubscriptionKeys.Add(Domain.EssentialsV2, ESSENTIALS_KEY);
-      if (!string.IsNullOrEmpty(PREMIER_KEY))
-        GuideStarClient.SubscriptionKeys.Add(Domain.PremierV3, PREMIER_KEY);
-      if (!string.IsNullOrEmpty(ESSENTIALS_KEY))
-        GuideStarClient.SubscriptionKeys.Add(Domain.Lookup, ESSENTIALS_KEY);
     }
+
     [Fact]
     public void GetOrganization_Works()
     {
@@ -51,6 +44,7 @@ namespace Candid.GuideStarAPI.Tests.Resources
       Assert.NotNull(charitycheck);
       Assert.Contains("charity", charitycheck);
     }
+
     [Fact]
     public async void GetOrganizationAsync_Works()
     {
