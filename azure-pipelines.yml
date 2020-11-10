@@ -62,7 +62,7 @@ steps:
     command: pack
     nobuild: true
     packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
-    versioningScheme: byPrereleaseNumber
+    versioningScheme: byEnvVar
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
