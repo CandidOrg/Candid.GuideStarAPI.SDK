@@ -48,6 +48,7 @@ steps:
   inputs:
     command: 'test'
     projects: '**/*.Tests.csproj'
+
 - task: DotNetCoreCLI@2
   displayName: 'Pack'
   inputs:
@@ -57,6 +58,7 @@ steps:
 - task: PowerShell@2
 #found basic explanation here: https://github.com/microsoft/azure-pipelines-tasks/issues/13553
   displayName: 'Signing package'
+  displayName: 'Publish Symbols'
   inputs:
     targetType: 'inline'
     script: |
@@ -71,7 +73,7 @@ steps:
     failOnStderr: true
     pwsh: true
 - task: DotNetCoreCLI@2
-  displayName: 'Push'
+  displayName: 'Push to local nuget repo'
   inputs:
     command: 'push'
     feedsToUse: 'config'

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Candid.GuideStarAPI
 {
-  public sealed class SubscriptionKeys : Dictionary<Domain, SubscriptionKey>
+  public sealed class SubscriptionKeys : ConcurrentDictionary<Domain, SubscriptionKey>
   {
     internal SubscriptionKeys()
     {
@@ -17,7 +17,7 @@ namespace Candid.GuideStarAPI
     /// </summary>
     /// <param name="domain">Domain that a value should be associated with</param>
     /// <param name="key">API key for domain value</param>
-    public new void Add(Domain domain, SubscriptionKey key)
+    public void Add(Domain domain, SubscriptionKey key)
     {
       if (domain is null)
       {
@@ -36,9 +36,9 @@ namespace Candid.GuideStarAPI
       Add(domain, new SubscriptionKey(primary, secondary));
     }
 
-    public bool IsEmpty()
+    public new bool IsEmpty()
     {
-      return (Count == 0);
+      return Count == 0;
     }
   }
 
