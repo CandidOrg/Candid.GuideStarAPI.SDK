@@ -48,7 +48,6 @@ steps:
   inputs:
     command: 'test'
     projects: '**/*.Tests.csproj'
-
 - task: DotNetCoreCLI@2
   displayName: 'Pack'
   inputs:
@@ -71,15 +70,6 @@ steps:
       nuget sign $package.FullName -CertificatePath $pfxPath -CertificatePassword "$(SIGNING-CERT-PASSWORD)" -Timestamper "http://timestamp.digicert.com"
     failOnStderr: true
     pwsh: true
-- task: DotNetCoreCLI@2
-  displayName: 'Push to local nuget repo'
-  inputs:
-    command: 'push'
-    feedsToUse: 'config'
-    includeNugetOrg: 'true'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: '6f219f31-982d-413d-a320-c7741368a80d'
 - task: NuGetCommand@2
   inputs:
     command: 'push'
