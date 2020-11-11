@@ -58,7 +58,6 @@ steps:
 - task: PowerShell@2
 #found basic explanation here: https://github.com/microsoft/azure-pipelines-tasks/issues/13553
   displayName: 'Signing package'
-  displayName: 'Publish Symbols'
   inputs:
     targetType: 'inline'
     script: |
